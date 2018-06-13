@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<xliff version="1.0">
+	<file source-language="en" datatype="plaintext" original="messages" date="2017-04-11T14:23:50Z" product-name="datatables">
+		<header/>
+		<body>
+			<trans-unit id="tx_datatables_domain_model_datatable">
+				<source>Datatable</source>
+			</trans-unit>
+			<trans-unit id="tx_datatables.date">
+				<source>m/d/Y</source>
+			</trans-unit>
+			<trans-unit id="tx_datatables.datetime">
+				<source>m/d/Y H:i</source>
+			</trans-unit>
+			<trans-unit id="tx_datatables.time">
+				<source>H:i</source>
+			</trans-unit>
+			<trans-unit id="tx_datatables.cancel">
+				<source>Cancel</source>
+			</trans-unit>
+			<trans-unit id="tx_datatables.confirm">
+				<source>Confirm</source>
+			</trans-unit>
+			<trans-unit id="tx_datatables.delete">
+				<source>Delete</source>
+			</trans-unit>
+			<trans-unit id="tx_datatables.delete_text">
+				<source>Record %s will be deleted. Are you sure?</source>
+			</trans-unit>
+		</body>
+	</file>
+</xliff>

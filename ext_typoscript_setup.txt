@@ -1,0 +1,13 @@
+module.tx_datatables {
+  settings {
+    yamlConfigurations {
+      100 = EXT:datatables/Configuration/Yaml/Settings.yaml
+    }
+  }
+
+  view {
+    templateRootPaths.100 = EXT:datatables/Resources/Private/Backend/Templates/
+    partialRootPaths.100 = EXT:datatables/Resources/Private/Backend/Partials/
+    layoutRootPaths.100 = EXT:datatables/Resources/Private/Backend/Layouts/
+  }
+}

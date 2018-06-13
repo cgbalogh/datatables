@@ -1,0 +1,2 @@
+var getParticipationsUri = '<h:uri.ajaxAction extensionName="Relax5project" controller="Project" pluginName="Project" action="new" arguments="{newProject:newProject}" />';
+var getParticipationsUri = '<h:uri.ajaxAction extensionName="Relax5project" controller="Project" pluginName="Project" action="new" arguments="{newProject:newProject}" />';

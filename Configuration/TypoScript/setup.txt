@@ -1,0 +1,91 @@
+
+plugin.tx_datatables_datatable {
+	view {
+		templateRootPaths.0 = {$plugin.tx_datatables_datatable.view.templateRootPath}
+		partialRootPaths.0 = {$plugin.tx_datatables_datatable.view.partialRootPath}
+		layoutRootPaths.0 = {$plugin.tx_datatables_datatable.view.layoutRootPath}
+	}
+	persistence {
+		storagePid = {$plugin.tx_datatables_datatable.persistence.storagePid}
+	}
+}
+
+## EXTENSION BUILDER DEFAULTS END TOKEN - Everything BEFORE this line is overwritten with the defaults of the extension builder
+
+# include JS for wrapper functions
+page.includeJSFooter {
+  DataTablesJs = EXT:datatables/Resources/Public/Scripts/DataTables-1.10.13/js/jquery.dataTables.js
+  DataTablesJs.forceOnTop = 0
+
+  DataTablesUiJs = EXT:datatables/Resources/Public/Scripts/DataTables-1.10.13/js/dataTables.jqueryui.js
+  DataTablesUiJs.forceOnTop = 0
+
+  DataTablesButtonsJs = EXT:datatables/Resources/Public/Scripts/Buttons-1.2.4/js/dataTables.buttons.js
+  DataTablesButtonsJs.forceOnTop = 0
+
+  DataTablesButtonsUiJs = EXT:datatables/Resources/Public/Scripts/Buttons-1.2.4/js/buttons.jqueryui.js
+  DataTablesButtonsUiJs.forceOnTop = 0
+
+  ResponsiveJs = EXT:datatables/Resources/Public/Scripts/Responsive-2.1.0/js/dataTables.responsive.js
+  ResponsiveJs.forceOnTop = 0
+
+  DataTablesHelperJs = EXT:datatables/Resources/Public/Scripts/dt-helper.js
+  DataTablesHelperJs.forceOnTop = 0
+
+  TypeWatchJs = EXT:datatables/Resources/Public/Scripts/jquery.typewatch.js
+  TypeWatchJs.forceOnTop = 0
+
+}
+
+page.includeCSS {
+   DataTablesCss = EXT:datatables/Resources/Public/Scripts/DataTables-1.10.13/css/dataTables.jqueryui.css
+   DataTablesButtonsCss = EXT:datatables/Resources/Public/Scripts/Buttons-1.2.4/css/buttons.jqueryui.css
+   DataTablesResponsiveCss = EXT:datatables/Resources/Public/Scripts/Responsive-2.1.0/css/responsive.jqueryui.css
+   DataTablesCustomCss = EXT:datatables/Resources/Public/Styles/datatables.custom.css
+}
+
+# Ajax configuration
+datatables = PAGE
+datatables {
+	#disable all headers
+	config {
+		disableAllHeaderCode = 1
+		disablePrefixComment = 1
+		additionalHeaders = Content-Type:text/html
+		xhtml_cleaning = 0
+		no_cache = 1
+		admPanel = 0
+
+		language = en
+		locale_all = en_UK.utf-8
+		metaCharset = utf-8
+		sys_language_uid = 0
+	}
+}
+
+plugin.tx_datatables_datatable {
+	settings {
+		autoAjax = {$plugin.tx_datatables_datatable.settings.autoAjax}
+		ajaxCallId = {$plugin.tx_datatables_datatable.settings.ajaxCallId}
+    }
+}
+
+# actual pagetype
+datatables_ajax < datatables
+datatables_ajax {
+	10 < tt_content.list.20.datatables_datatable
+	typeNum = {$plugin.tx_datatables_datatable.settings.ajaxCallId}
+}
+
+[globalVar = GP:L = 1]
+	datatables_ajax.config.language = de
+	datatables_ajax.config.locale_all = de_DE.utf-8
+	datatables_ajax.config.sys_language_uid = 1
+[global]
+
+config.tx_extbase {
+  features {
+    requireCHashArgumentForActionArguments = 0
+  }
+}
+

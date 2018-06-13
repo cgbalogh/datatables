@@ -1,0 +1,831 @@
+<?php
+namespace CGB\Datatables\Service;
+
+/***************************************************************
+ *
+ *  Copyright notice
+ *
+ *  (c) 2017 Christoph Balogh <cb@lustige-informatik.at>
+ *
+ *  All rights reserved
+ *
+ *  This script is part of the TYPO3 project. The TYPO3 project is
+ *  free software; you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation; either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  The GNU General Public License can be found at
+ *  http://www.gnu.org/copyleft/gpl.html.
+ *
+ *  This script is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  This copyright notice MUST APPEAR in all copies of the script!
+ ***************************************************************/
+
+/**
+ * Various helper routines
+ *
+ * @version $Id:$
+ * @license http://opensource.org/licenses/gpl-license.php GNU protected License, version 2
+ */
+class DataService implements \TYPO3\CMS\Core\SingletonInterface {
+
+    const EDIT_BUTTON = 'EDIT BUTTON';
+    const SHOW_BUTTON = 'SHOW BUTTON';
+    const DELETE_BUTTON = 'DELETE BUTTON';
+    const CHECKBOX = 'CHECKBOX';
+
+
+    /**
+     *
+     * @var \TYPO3\CMS\Extbase\Service\ImageService 
+     */
+    protected $imageService;
+    
+    /**
+     *
+     * @var type 
+     */
+    protected $settings = null;
+    
+    /**
+     *
+     * @var string 
+     */
+    protected $translationPrefix = '';
+    
+    /**
+     *
+     * @var string 
+     */
+    protected $translationExtKey = '';
+
+    /**
+     * @var string
+     */
+    protected $repositoryName = '';
+    
+    /**
+     *
+     * @var string 
+     */
+    protected $controller = '';
+    
+    /**
+     * @var string
+     */
+    protected $collapseProperties = '';
+    
+    /**
+     * 
+     * @param \TYPO3\CMS\Extbase\Service\ImageService $imageService
+     */
+    public function injectImageService(\TYPO3\CMS\Extbase\Service\ImageService $imageService) {
+        $this->imageService = $imageService;
+    }
+    
+    /**
+     * 
+     * @param type $errorLevel
+     * @param type $errorMessage
+     * @param type $errorFile
+     * @param type $errorLine
+     */
+    public function handleError($errorLevel, $errorMessage, $errorFile, $errorLine) {
+        echo $errorLevel, $errorMessage;
+    }
+
+
+    /**
+     * 
+     * @param mixed $settings
+     */
+    public function setSettings($settings, $cObjUid) {
+        $this->settings = $settings;
+        // if cObjUid is given as request param then ajax call is assumed and we need
+        // to get the flexform contents for the plugin
+        if ( \TYPO3\CMS\Core\Utility\GeneralUtility::_GET('cobj') > 0) {
+            // if set already by TS do nothing
+            if ($settings['datatables']['domainObject'] == '') {
+                $cObjUid = \TYPO3\CMS\Core\Utility\GeneralUtility::_GET('cobj');
+                $this->settings = $this->readPluginFF($cObjUid);
+            }
+        }
+        $this->requestParams = array(
+            'pageType' => \TYPO3\CMS\Core\Utility\GeneralUtility::_GET('type'),
+            'pageUid' => \TYPO3\CMS\Core\Utility\GeneralUtility::_GET('id'),
+            'cObjUid' => $cObjUid,
+            'iSortingCols' => \TYPO3\CMS\Core\Utility\GeneralUtility::_GET('iSortingCols'),
+            'iDisplayStart' => \TYPO3\CMS\Core\Utility\GeneralUtility::_GET('start'),
+            'iDisplayLength' => \TYPO3\CMS\Core\Utility\GeneralUtility::_GET('length'),
+            'sorting' => \TYPO3\CMS\Core\Utility\GeneralUtility::_GET('order'),
+            'search' => \TYPO3\CMS\Core\Utility\GeneralUtility::_GET('search'),
+        );
+    }
+    
+    /**
+     * 
+     * @return mixed
+     */
+    public function getSettings() {
+        return $this->settings;
+    }
+    
+    /**
+     * 
+     * @return array
+     */
+    public function getRequestParams( $param ) {
+        return $this->requestParams[$param];
+    }
+            
+    /**
+     * 
+     * @return string
+     */
+    function getTranslationPrefix() {
+        return $this->translationPrefix;
+    }
+
+    /**
+     * 
+     * @return string
+     */
+    function getTranslationExtKey() {
+        return $this->translationExtKey;
+    }
+
+    /**
+     * 
+     * @param string $translationPrefix
+     */
+    function setTranslationPrefix($translationPrefix) {
+        $this->translationPrefix = $translationPrefix;
+    }
+
+    /**
+     * 
+     * @param string $translationExtKey
+     */
+    function setTranslationExtKey($translationExtKey) {
+        $this->translationExtKey = $translationExtKey;
+    }
+
+    /**
+     * 
+     * @return string
+     */
+    function getRepositoryName() {
+        return $this->repositoryName;
+    }
+
+    /**
+     * 
+     * @param string $repositoryName
+     */
+    function setRepositoryName($repositoryName) {
+        $this->repositoryName = $repositoryName;
+    }
+
+    /**
+     * 
+     * @return string
+     */
+    function getController() {
+        return $this->controller;
+    }
+
+    /**
+     * 
+     * @param string$controller
+     */
+    function setController($controller) {
+        $this->controller = $controller;
+    }
+        
+    /**
+     * 
+     * @return string
+     */
+    function getCollapseProperties() {
+        return $this->collapseProperties;
+    }
+
+    /**
+     * 
+     * @param type $collapseProperties
+     */
+    function setCollapseProperties($collapseProperties) {
+        $this->collapseProperties = $collapseProperties;
+    }
+
+    
+    /**
+     * 
+     * @param int $cObjUid
+     * @return mixed
+     */
+    public function readPluginFF( $cObjUid ) {
+        if ($cObjUid > 0) {
+            $ff = $GLOBALS['TYPO3_DB']->exec_SELECTgetRows('pi_flexform','tt_content','uid=' . $cObjUid);
+            $flexformService = new \TYPO3\CMS\Extbase\Service\FlexFormService;
+            $ffC = $flexformService->convertFlexFormContentToArray($ff[0]['pi_flexform']);
+            return $ffC['settings'];
+        } 
+        return false;
+    }
+    
+    /**
+     * 
+     * @param int $cObjUid
+     * @return mixed
+     */
+    public function readPluginPid( $cObjUid ) {
+        if ($cObjUid > 0) {
+            $pages = $GLOBALS['TYPO3_DB']->exec_SELECTgetRows('pages','tt_content','uid=' . $cObjUid);
+            return $pages[0]['pages'];
+        } 
+        return 0;
+    }
+
+    /**
+     * 
+     * @param type $name
+     */
+    public function renderHeaderList ( $name = 'datatables') {
+        $propertyList = \TYPO3\CMS\Core\Utility\GeneralUtility::trimExplode(',', $this->settings[$name]['listView']);
+        if (! empty($GLOBALS['TSFE']->fe_user->user['uid'])) {
+            $feUser = intval($GLOBALS['TSFE']->fe_user->user['uid']);
+            $feGroupArray = $GLOBALS['TSFE']->fe_user->groupData['uid'];
+		}
+        
+        $headerList = array();
+        foreach ($propertyList as $propertyId => $property) {
+            if (strpos($property, '.') === false) {
+                $headerList[$property]['_id'] = $propertyId;
+                $headerList[$property]['_property'] = $property;
+                $headerList[$property]['header'] = 
+                    \TYPO3\CMS\Extbase\Utility\LocalizationUtility::translate($this->translationPrefix . '.' . \TYPO3\CMS\Core\Utility\GeneralUtility::camelCaseToLowerCaseUnderscored($property), $this->translationExtKey);
+            } else {
+                if (strpos($property, '#') !== false) {
+                    $splitProperty = explode('#', $property);
+                    $property = $splitProperty[0];
+                    $prefix = $splitProperty[1];
+                    $propCascade = explode('.', $property);
+                    $cascadedProperty = $prefix . '.' . $propCascade[count($propCascade)-1];
+                } else {
+                    $prefix = substr($this->translationPrefix, 0, strpos($this->translationPrefix, 'domain_model') + 13);
+                    $propCascade = explode('.', $property);
+                    $cascadedProperty = $prefix . $propCascade[count($propCascade)-2] . '.' . $propCascade[count($propCascade)-1];
+                }
+                $headerList[$property]['_id'] = $propertyId;
+                $headerList[$property]['_property'] = $property;
+                $headerList[$property]['header'] = 
+                    \TYPO3\CMS\Extbase\Utility\LocalizationUtility::translate(\TYPO3\CMS\Core\Utility\GeneralUtility::camelCaseToLowerCaseUnderscored($cascadedProperty), $this->translationExtKey);
+                
+                if ($headerList[$property]['header'] == '' ) {
+                    $headerList[$property]['header'] = \TYPO3\CMS\Core\Utility\GeneralUtility::camelCaseToLowerCaseUnderscored($cascadedProperty);
+                }
+                
+            }
+            
+            if (is_null($headerList[$property]['header'])) {
+                switch ($property) {
+                    case 'uid':
+                        $headerList[$property]['header'] = '#';
+                        break;
+                    case self::DELETE_BUTTON:
+                    case self::EDIT_BUTTON:
+                    case self::SHOW_BUTTON:
+                    case self::CHECKBOX:
+                        $headerList[$property]['header'] = '';
+                        $headerList[$property]['dontsort'] = 1;
+                        break;
+                    default:
+                        $headerList[$property]['header'] = $property;
+                }
+            }
+        }
+        
+        foreach ($headerList as $headerKey => $headerText) {
+            if (strpos($headerKey, '.') !== false) {
+                $prefix = substr($headerKey, 0, strpos($headerKey, '.') - 1);
+                $headerList[$headerKey]['group'] = $prefix;
+            }
+        }
+
+        if (is_array($this->settings[$name]['config'])) {
+            foreach ($this->settings[$name]['config'] as $config) {
+                $property = $config['record']['property'];
+                if (strpos($property, '#') !== false) {
+                    $splitProperty = explode('#', $property);
+                    $property = $splitProperty[0];
+                }
+
+                if ( is_array($propertyList) && (array_search($config['record']['property'], $propertyList) !== false) ) {
+                    $headerList[$property]['class'] .= ' ' . $config['record']['cssclass'];
+                    $headerList[$property]['align'] = $config['record']['align'];
+                    $headerList[$property]['all'] = $config['record']['showalways'];
+                    $headerList[$property]['dontsort'] = $config['record']['dontsort'] || $headerList[$config['record']['property']]['dontsort'];
+                    $headerList[$property]['customtitle'] = $config['record']['customtitle'];
+                    $headerList[$property]['showfirstchildonly'] = $config['record']['showfirstchildonly'];
+                    $headerList[$property]['allowedgroups'] = $config['record']['allowedgroups'];
+                    $headerList[$property]['images'] = $config['record']['images'];
+                    $headerList[$property]['link'] = $config['record']['link'];
+                    $headerList[$property]['mapping'] = $config['record']['mapping'];
+
+                    if ($config['record']['allowedusers']) {
+                        $allowedusersList = explode(',', $config['record']['allowedusers']);
+                        if (array_search($feUser, $allowedusersList) === false) {
+                            $headerList[$property]['noaccess'] = true;
+                        }
+                    }
+
+                    if ($config['record']['allowedgroups']) {
+                        $allowedgroupsList = explode(',', $config['record']['allowedgroups']);
+                        if (count(array_intersect($feGroupArray, $allowedgroupsList)) === 0) {
+                            $headerList[$property]['noaccess'] = true;
+                        }
+
+                    }
+                }
+            }
+        }
+        $formatList['dateformat'] = \TYPO3\CMS\Extbase\Utility\LocalizationUtility::translate('tx_datatables.date', 'datatables');
+        $formatList['datetimeformat'] = \TYPO3\CMS\Extbase\Utility\LocalizationUtility::translate('tx_datatables.datetime', 'datatables');
+        $formatList['timeformat'] = \TYPO3\CMS\Extbase\Utility\LocalizationUtility::translate('tx_datatables.time', 'datatables');
+        return array(
+            'properties' => $propertyList,
+            'headers' => $headerList,
+            'formats' => $formatList,
+        );
+    }
+
+    /**
+     * 
+     * @param array $outputConfig
+     * @param string $name
+     * @param object $controllerContext
+     * @return type
+     */
+    public function renderTableData ( $outputConfig, $name = 'datatables', $controllerContext = null ) {
+        $objectManager = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('TYPO3\\CMS\\Extbase\\Object\\ObjectManager');
+        if ($this->getRepositoryName() == 'Repository') {
+            $result = new \stdClass();
+            $result->recordsTotal = 0;
+            $result->recordsFiltered = 0;
+            $result->data = [];;
+            return json_encode($result);
+        }
+        $this->controllerContext = $controllerContext;
+        $repository = $objectManager->get($this->getRepositoryName());
+
+        $class = $this->settings['datatables']['domainObject'];
+        
+        $obj = new $class;
+        $gettableProperties = \TYPO3\CMS\Extbase\Reflection\ObjectAccess::getGettablePropertyNames($obj);
+        $sorting = array();
+        foreach ($this->requestParams['sorting'] as $s) {
+            $sortProperty = $outputConfig['properties'][$s['column']];
+            if (array_search($sortProperty, $gettableProperties) !== false ) {
+                $sorting[$sortProperty] = strtoupper($s['dir']);
+            }
+        }
+
+        if (method_exists ($repository, 'countAll')) {
+            $totalCount = $repository->countAll();
+        }
+        
+        $totalFiltered = $this->findDatatable(
+            $repository,
+            $sorting, 
+            $this->requestParams['iDisplayStart'], 
+            $this->requestParams['iDisplayLength'], 
+            $this->requestParams['search'], 
+            $outputConfig['properties'], 
+            true 
+        );
+        
+        $objects = $this->findDatatable(
+            $repository,
+            $sorting, 
+            $this->requestParams['iDisplayStart'], 
+            $this->requestParams['iDisplayLength'], 
+            $this->requestParams['search'],
+            $outputConfig['properties'],
+            false
+        );
+        
+        $elementsView = $objectManager->get('TYPO3\\CMS\\Fluid\\View\\StandaloneView');
+        $templatePathAndFilename = PATH_site . 'typo3conf/ext/datatables/Resources/Private/Templates/Datatable/Elements.html';
+        $elementsView->setTemplatePathAndFilename($templatePathAndFilename);
+        // $emailView->assignMultiple($variables);
+        $objectList = array();
+        
+        foreach ($objects as $object) {
+            $objectProperties = array();
+            $objectProperties['DT_RowId'] = $name.'_'.$object->getUid();
+            $objectProperties['DT_RowClass'] = "dt-mainrow";
+            foreach ($outputConfig['headers'] as $property => $header) {
+                
+                if ($header['noaccess']) {
+                    continue;
+                }
+                
+                switch ($property) {
+                    case self::EDIT_BUTTON:
+                    case self::SHOW_BUTTON:
+                    case self::DELETE_BUTTON:
+                    case self::CHECKBOX:
+                        $elementsView->assignMultiple(array(
+                                'property' => $property,
+                                'name' => $name,
+                                'controller' => $this->controller,
+                                'extKey' => $this->translationExtKey,
+                                'cobj' => $this->requestParams['cObjUid'],
+                                'uid' => $object->getUid(),
+                                'action' => $this->settings['datatables']['action'],
+                            )
+                        );
+                        $elements = $elementsView->render();
+                        $objectProperties[] = $elements;
+                        break;
+                    default:
+                        $dataMatrix = self::dataMatrix( $object, $property, $header );
+                        // print_r($dataMatrix);
+                        
+                        if (self::array_depth($dataMatrix) == 1) {
+                            $objectProperties[] = '<span reference="'.$name.'_' . $dataMatrix['_uid'] . '_' . $dataMatrix['_property'] . '">' . $dataMatrix['_value'] . '</span>';
+                        } else {
+                            $htmlAttributes = [
+                                'table' =>  [
+                                    'class' => 'tx_dastool-innertable',
+                                ],
+                                'tr' => [
+                                    'class' => 'tx_dastool-innertable_tr',
+                                ],
+                                'td' => [
+                                    'class' => 'tx_dastool-innertable_td',
+                                ]
+                            ];
+                            $data = self::dataMatrixToTable($dataMatrix, $htmlAttributes);
+                            $objectProperties[] = $data;
+                        }
+                    }
+                
+            }
+            $objectList[] = $objectProperties;
+        }
+        
+        $result = new \stdClass();
+        $result->recordsTotal = $totalCount;
+        $result->recordsFiltered = $totalFiltered;
+        $result->data = $objectList;
+        return json_encode($result);
+    }
+ 
+
+    /**
+     * 
+     * @param type $repository
+     * @param type $sorting
+     * @param type $offset
+     * @param type $limit
+     * @param type $search
+     * @param type $properties
+     * @param type $count
+     * @return type
+     */
+    public function findDatatable( $repository, $sorting, $offset, $limit, $search, $properties, $count = false ) {
+        if (! method_exists($repository, 'createQuery')) {
+            return [];
+        }
+        
+		$query = $repository->createQuery();
+
+        $pages = $this->readPluginPid($this->requestParams['cObjUid']);
+        if ($pages) {
+            $query->getQuerySettings()->setStoragePageIds(explode(',', $pages));
+        }
+        // $query->getQuerySettings()->setRespectStoragePage(false);
+        
+        if ($search['value']) {
+            foreach( $properties as $property) {
+                if ($properties['noaccess']) {
+                    continue;
+                }
+                
+                if (strpos($property, '#') !== false) {
+                    $splitProperty = explode('#', $property);
+                    $property = $splitProperty[0];
+                }
+
+                if ((strpos($property, '.') !== false) && ($this->settings['datatables']['action']['limitQueriesToMainRepository'])) {
+                    $property = false;
+                }
+                
+                if ($property && ($property != self::SHOW_BUTTON) && ($property != self::EDIT_BUTTON) && ($property != self::DELETE_BUTTON) && ($property != self::CHECKBOX)) {
+                    $constraints[] = $query->like($property, $search['value'] . '%');
+                }
+            }
+            $query->matching($query->logicalOr($constraints));
+        }
+
+        if ( is_array($sorting) ) {
+            $query->setOrderings($sorting);        
+        }
+        
+        if ($this->settings['datatables']['action']['debug']) {
+            $objectManager = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('TYPO3\\CMS\\Extbase\\Object\\ObjectManager');
+
+            $queryBuilder = $objectManager->get('TYPO3\\CMS\\Extbase\\Persistence\\Generic\\Storage\\Typo3DbQueryParser');
+            $doctrineQueryBuilder = $queryBuilder->convertQueryToDoctrineQueryBuilder($query);
+
+            $rawSQL = $doctrineQueryBuilder->getSQL();
+            $fp = fopen('tx_datatables.log', 'a+');
+            fwrite($fp, $rawSQL . "\n");
+            fclose($fp);
+        }
+        
+        if ($count) {
+            $result = $query->count();
+            return $result;
+        } else {
+            $query->setLimit( (int) $limit );
+            $query->setOffset( (int) $offset );
+            $result = $query->execute();
+            return $result;
+        }
+    }
+
+
+    /**
+     * 
+     * @param object $object
+     * @param string $propertyPath
+     * @return array
+     */
+    public function dataMatrix ( $object, $propertyPath, $header ) {
+        $singleOnly = ( $header['showfirstchildonly'] === 1);
+        $retValue = [];
+        $fetchSubAlignArray = false;
+        $propertyPathArray = explode('.', $propertyPath);
+        // store first property name in $currentProperty
+        $currentProperty = array_shift($propertyPathArray);
+        
+        if ($object instanceof \TYPO3\CMS\Extbase\Persistence\ObjectStorage) {
+            if ($singleOnly) {
+                $retValue[] = self::dataMatrix($object->current(), $propertyPath, $header);
+            } else {
+                foreach ($object as $element) {
+                    $retValue[] = self::dataMatrix($element, $propertyPath, $header);
+                }
+            }
+        } elseif (gettype($object) == 'object') {
+            if (isset($header['_propertylist'])) {
+                $subHeader = $header;
+                unset($subHeader['_propertylist']);
+                
+                $storageObject = $object->_getProperty($propertyPath);
+                
+                foreach($storageObject as $singleObject) {
+                    $childRetValue = [];
+                    foreach ($header['_propertylist'] as $childIndex => $childProperty) {
+                        $childObject = $object->_getProperty($childProperty);
+                        $childRetValue[] = self::dataMatrix($singleObject, $childProperty, $subHeader );
+                    }
+                    $retValue[] = ['_subTable' => $childRetValue];
+                    
+                    if ($singleOnly) {
+                        break;
+                    }
+                }
+                return $retValue;
+            } else {
+                $_uid = $object->getUid();
+                $object = $object->_getProperty( $currentProperty );
+            }
+        }
+        
+        if (count($propertyPathArray) > 0) {
+            // more elements, descend into child elements
+            $retValue[] = self::dataMatrix($object, implode('.', $propertyPathArray), $header );
+        } else {
+            // last element, no more descending
+            if (! $object instanceof \TYPO3\CMS\Extbase\Persistence\ObjectStorage) {
+                $retValue['_value'] = self::convertToString($object, $header['formats'], $header);
+                $retValue['_uid'] = $_uid;
+                $retValue['_property'] = $currentProperty;
+                $retValue['_align'] = $header[_alignlist];
+            }
+            return $retValue;
+        }
+        return $retValue;
+    }
+ 
+    /**
+     * 
+     * @param array $datatMatrix
+     * @param array $htmlAttributes
+     * @return type
+     */
+    public function dataMatrixToTable(array $dataMatrix, array $htmlAttributes, $subTable = false, $dontwrap = false) {
+        $subAsTable = false;
+        
+        if (isset($dataMatrix['_value'])) {
+            if ($dataMatrix['_value']) {
+                if ( ! is_array($dataMatrix['_align'])) {
+                    $addClass = "dt-{$dataMatrix['_align']}";
+                }
+                if ($subAsTable) {
+                    return "<td class=\"dt-main $addClass\">" . $dataMatrix['_value'] . '</td>';
+                } else {
+                    return "{$dataMatrix['_value']} ";
+                }
+            } else {
+                return '';
+            }
+            
+        } elseif (is_array($dataMatrix) && (count($dataMatrix) == 1)) {
+            // print_r($dataMatrix); 
+            if (isset($dataMatrix['_subTable'])) {
+                $innerValue = self::dataMatrixToTable($dataMatrix['_subTable'], $htmlAttributes, true);
+                if ( $dontwrap ) {
+                    return "$innerValue";
+                } else {
+                    if ($subAsTable) {
+                        $table = '<table ';
+                        foreach ($htmlAttributes['table'] as $attribute => $value) {
+                            $table .= $attribute . "=\"$value\" ";
+                        }
+                        $table .= '>';
+                        return $table . "<tr>$innerValue</tr></table>";
+                    } else {
+                        $innerHtml = '<div class="dt-sub">';
+                        return $innerHtml . "$innerValue</div>";
+                    }
+                }
+                
+            } else {
+                return self::dataMatrixToTable($dataMatrix[0], $htmlAttributes);
+            }
+           
+        } elseif (is_array($dataMatrix) && ! $subTable) {
+            if ($subAsTable) {
+                $table = '<table ';
+                foreach ($htmlAttributes['table'] as $attribute => $value) {
+                    $table .= $attribute . "=\"$value\" ";
+                }
+                $table .= '>';
+                foreach($dataMatrix as $index => $subMatrix) {
+                    $table .= '<tr>' . self::dataMatrixToTable($subMatrix, $htmlAttributes, false, true) . '</tr>';
+                }
+                $table .= '</table>';
+                return $table;
+            } else {
+                $innerHtml = '<div class="dt-sub">';
+                foreach($dataMatrix as $index => $subMatrix) {
+                    $innerHtml .= self::dataMatrixToTable($subMatrix, $htmlAttributes, false, true) . '<br />';
+                }
+                if (substr($innerHtml, -6, 6) == '<br />') { 
+                    $innerHtml = substr($innerHtml, 0, strlen($innerHtml) - 6);
+                }
+                return "$innerHtml</div>";
+            }
+            
+        } elseif (is_array($dataMatrix) && $subTable) {
+            foreach($dataMatrix as $index => $subMatrix) {
+                if ($subMatrix['_align']) {
+                    $subMatrix['_align'] = $subMatrix['_align'][$index];
+                }
+                $table .= self::dataMatrixToTable($subMatrix, $htmlAttributes, true);
+            }
+            return $table;
+            
+        }
+    }
+    
+    /**
+     * 
+     * @param array $array
+     * @return int
+     */
+    public function array_depth(array $array) {
+        $max_depth = 1;
+
+        foreach ($array as $value) {
+            if (is_array($value)) {
+                $depth = self::array_depth($value) + 1;
+
+                if ($depth > $max_depth) {
+                    $max_depth = $depth;
+                }
+            }
+        }
+
+        return $max_depth;
+    }    
+    
+    
+    /**
+     * 
+     * @param mixed $obj
+     * @param array $h
+     * @return type
+     */
+    public function convertToString ( $obj, $h, $p ) {
+        if ((gettype($obj) == 'object') && (get_class($obj) == 'DateTime')) {
+            $html = $obj->format(\TYPO3\CMS\Extbase\Utility\LocalizationUtility::translate('tx_datatables.date', 'datatables'));
+        } elseif ( (gettype($obj) == 'integer') && ($p['images']) ) {
+            $imageList = explode(',', $p['images']);
+            $plainvalue = $obj;
+            // $imageList = \TYPO3\CMS\Core\Utility\GeneralUtility::intExplode(',', $p['images']);
+            if ($imageList[$obj]) {
+                if (is_numeric($imageList[$obj])) {
+                    $resourceFactory = \TYPO3\CMS\Core\Resource\ResourceFactory::getInstance();
+                    $file = $resourceFactory->getFileObject($imageList[$obj]);
+                    $filename = "fileadmin" . $file->getIdentifier();
+                } else {
+                    $filename = $imageList[$obj];
+                }
+                // $fileRepository = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('TYPO3\\CMS\\Core\\Resource\\FileRepository');
+                // $imageRef = $fileRepository->findByUid($imageList[$obj-1]);
+                // $fileRef = $imageRef->findFileReferenceByUid($imageList[$obj-1]);
+                
+                
+                // $image = $this->imageService->getImage($fileRef, null, true);
+                // $imageUri = $this->imageService->getImageUri($image, false);
+                $html = "<image src=\"{$filename}\" alt=\"\" />";
+            } else {
+                $html = (string) $obj;
+            }
+        } elseif ((gettype($obj) == 'object') && (get_class($obj) == 'TYPO3\\CMS\\Extbase\\Domain\\Model\\FileReference')){
+            $image = $this->imageService->getImage($obj->getUid(), null, true);
+            $imageUri = $this->imageService->getImageUri($image, false);
+            $html = "<image src=\"$imageUri\" width=\"37px;\" alt=\"\" />";
+        } else {
+            $html = (string) $obj;
+        }
+        
+        if ($p['mapping'] && $html) {
+            $html = str_replace('{value}', $html, $p['mapping']);
+            $html = str_replace('{plainvalue}', $plainvalue, $html);
+            
+            // $html = sprintf($p['mapping'], $html);
+        }
+        
+        if ($p['link']) {
+            $href =  $this->controllerContext->getUriBuilder()->reset()->setTargetPageUid($p['link'])->buildFrontendUri();
+            return $this->wrapInLink($html, $href);
+        }
+        return $html;
+        
+    }
+    
+    /**
+     * 
+     * @param string $html
+     * @param string $href
+     * @return string
+     */
+    private function wrapInLink ($html, $href) {
+        if ($href) {
+            return "<a href=\"$href\">$html</a>";
+        } else {
+            return $html;
+        }
+    }
+    
+    
+    /**
+     * 
+     * @param mixed $flat
+     * @param mixed $propertyList
+     * @return type
+     */
+    function stack ($flat, $propertyList) {
+        $retVal = [];
+        foreach ($flat as $key => $entry) {
+            if ( ($separatorPos = strpos($key, '.')) === false) {
+                $retVal[$key] = $entry;
+            } elseif (is_array($propertyList) && (array_search(substr($key, 0, $separatorPos), $propertyList) === false)) {
+                $retVal[$key] = $entry;
+            } else {
+                $newKey = substr($key, 0, $separatorPos);
+                $newSubkey = substr($key, $separatorPos + 1);
+                $retVal[$newKey]['header'] .= (($retVal[$newKey]['header']) ? ' ' : '') . $entry['header'];
+                $retVal[$newKey]['showfirstchildonly'] |= $entry['showfirstchildonly'];
+                $retVal[$newKey]['dontsort'] |= 1;
+                $retVal[$newKey]['_idlist'][] = $entry['_id'];
+                $retVal[$newKey]['_propertylist'][] = $newSubkey;
+                $retVal[$newKey]['_alignlist'][] = $entry['align'];
+            }
+        }
+        return $retVal;
+    }
+    
+}

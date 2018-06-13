@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<xliff version="1.0">
+	<file source-language="en" target-language="de" datatype="plaintext" original="messages" date="2017-06-05T18:17:48Z" product-name="datatables">
+		<header/>
+		<body>
+			<trans-unit id="tx_datatables_domain_model_datatable">
+				<source>Datatable</source>
+				<target>Datatable</target>
+			</trans-unit>
+			<trans-unit id="tx_datatables.date">
+				<source>m/d/Y</source>
+				<target>d.m.Y</target>
+			</trans-unit>
+			<trans-unit id="tx_datatables.datetime">
+				<source>m/d/Y H:i</source>
+				<target>d.m.Y H:i</target>
+			</trans-unit>
+			<trans-unit id="tx_datatables.time">
+				<source>H:i</source>
+				<target>H:i</target>
+			</trans-unit>
+			<trans-unit id="tx_datatables.cancel">
+				<source>Cancel</source>
+				<target>Abbrechen</target>
+			</trans-unit>
+			<trans-unit id="tx_datatables.confirm">
+				<source>Confirm</source>
+				<target>Bestätigen</target>
+			</trans-unit>
+			<trans-unit id="tx_datatables.delete">
+				<source>Delete</source>
+				<target>Löschen</target>
+			</trans-unit>
+			<trans-unit id="tx_datatables.new">
+				<source>Create New Record</source>
+				<target>Neuen Datensatz anlegen</target>
+			</trans-unit>
+			<trans-unit id="tx_datatables.delete_text">
+				<source>Record &lt;b&gt;%s&lt;/b&gt; will be deleted. Are you sure?</source>
+				<target>Der Datensatz &lt;b&gt;%s&lt;/b&gt; wird gelöscht. Sind Sie sicher?</target>
+			</trans-unit>
+		</body>
+	</file>
+</xliff>

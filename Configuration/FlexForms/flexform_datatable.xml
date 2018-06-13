@@ -1,0 +1,671 @@
+<T3DataStructure>
+	<sheets>
+      <sheet1>
+		<sDEF>
+			<ROOT>
+				<TCEforms>
+					<sheetTitle>Function</sheetTitle>
+				</TCEforms>
+				<type>array</type>
+				<el>
+					<switchableControllerActions>
+						<TCEforms>
+							<label>Select function</label>
+							<config>
+								<type>select</type>
+								<items>
+									<numIndex index="0">
+										<numIndex index="0">List Items</numIndex>
+										<numIndex index="1">Datatable->list</numIndex>
+									</numIndex>
+								</items>
+							</config>
+						</TCEforms>
+					</switchableControllerActions>
+				</el>
+			</ROOT>
+		</sDEF>
+      </sheet1>        
+      <sheet2>
+		 <ROOT>
+		  <TCEforms>
+		  <sheetTitle>General</sheetTitle>
+		  </TCEforms>
+		  <type>array</type>
+		  <el>
+		  <settings.datatables.vendorList>
+			 <TCEforms>
+			  <label>Consider extensions from following vendors (comma separated list)</label>
+			  <config>
+                <type>input</type>
+                <size>60</size>
+			  </config>
+			 </TCEforms>
+		  </settings.datatables.vendorList>
+            
+		  <settings.datatables.domainObject>
+			 <TCEforms>
+			  <label>Domain object for list view</label>
+              <onChange>reload</onChange>
+			  <config>
+                <type>select</type>
+                <itemsProcFunc>CGB\Datatables\UserFunc\FlexFormUserFunc->getClasses</itemsProcFunc>
+                <maxitems>1</maxitems>
+                <size>1</size>			  
+              </config>
+			 </TCEforms>
+		  </settings.datatables.domainObject>
+
+		  <settings.datatables.action.ajaxPlugin>
+			 <TCEforms>
+			  <label>AJAX calls plugin</label>
+			  <config>
+			  <type>input</type>
+              <default>Ajax</default>
+			  </config>
+			 </TCEforms>
+		  </settings.datatables.action.ajaxPlugin>
+
+		  <settings.datatables.action.contentPlugin>
+			 <TCEforms>
+			  <label>Content plugin</label>
+			  <config>
+			  <type>input</type>
+              <default></default>
+			  </config>
+			 </TCEforms>
+		  </settings.datatables.action.contentPlugin>
+
+		  <settings.datatables.action.ajaxPageType>
+			 <TCEforms>
+			  <label>AJAX calls pagetype</label>
+			  <config>
+			  <type>input</type>
+              <default>112233</default>
+              <eval>int</eval>
+			  </config>
+			 </TCEforms>
+		  </settings.datatables.action.ajaxPageType>
+                    
+		  <settings.datatables.action.pageUid>
+			 <TCEforms>
+			  <label>Action pageUid</label>
+			  
+              <config>
+                <type>group</type>
+                <internal_type>db</internal_type>
+                <allowed>pages</allowed>
+                <size>1</size>
+                <maxitems>1</maxitems>
+                <minitems>0</minitems>
+                <show_thumbs>1</show_thumbs>
+              </config>
+			 </TCEforms>
+		  </settings.datatables.action.pageUid>
+
+          <settings.datatables.action.editAction>
+			 <TCEforms>
+			  <label>Action to be called on edit (default: edit)</label>
+			  <config>
+			  <type>input</type>
+			  <size>60</size>
+              <default>edit</default>
+			  </config>
+			 </TCEforms>
+		  </settings.datatables.action.editAction>
+
+		  <settings.datatables.action.editActionAjax>
+			 <TCEforms>
+			  <label>AJAX calls via extbase_ajax for editAction (requires extbase_ajax)</label>
+			  <config>
+			  <type>check</type>
+			  </config>
+			 </TCEforms>
+		  </settings.datatables.action.editActionAjax>
+                    
+		  <settings.datatables.action.showAction>
+			 <TCEforms>
+			  <label>Action to be called on show (default: show)</label>
+			  <config>
+			  <type>input</type>
+			  <size>60</size>
+              <default>show</default>
+			  </config>
+			 </TCEforms>
+		  </settings.datatables.action.showAction>
+
+		  <settings.datatables.action.showActionAjax>
+			 <TCEforms>
+			  <label>AJAX calls via extbase_ajax for showAction (requires extbase_ajax)</label>
+			  <config>
+			  <type>check</type>
+			  </config>
+			 </TCEforms>
+		  </settings.datatables.action.showActionAjax>
+
+          <settings.datatables.action.newAction>
+			 <TCEforms>
+			  <label>Action to be called on new (default: new)</label>
+			  <config>
+			  <type>input</type>
+			  <size>60</size>
+              <default>new</default>
+			  </config>
+			 </TCEforms>
+		  </settings.datatables.action.newAction>
+
+          <settings.datatables.action.newColumn>
+			 <TCEforms>
+			  <label>New record button will be placed in column (starting with 0, -1 = disable)</label>
+			  <config>
+			  <type>input</type>
+			  <size>10</size>
+              <eval>int</eval>
+              <default>-1</default>
+			  </config>
+			 </TCEforms>
+		  </settings.datatables.action.newColumn>
+
+          <settings.datatables.action.newActionAjax>
+			 <TCEforms>
+			  <label>AJAX calls via extbase_ajax for newAction (requires extbase_ajax)</label>
+			  <config>
+			  <type>check</type>
+			  </config>
+			 </TCEforms>
+		  </settings.datatables.action.newActionAjax>
+                    
+		  <settings.datatables.action.deleteAction>
+			 <TCEforms>
+			  <label>Action to be called on delete (default: delete)</label>
+			  <config>
+			  <type>input</type>
+			  <size>60</size>
+              <default>delete</default>
+			  </config>
+			 </TCEforms>
+		  </settings.datatables.action.deleteAction>
+
+		  <settings.datatables.action.deleteActionAjax>
+			 <TCEforms>
+			  <label>AJAX calls for deleteAction (requires extbase_ajax)</label>
+			  <config>
+			  <type>check</type>
+			  </config>
+			 </TCEforms>
+		  </settings.datatables.action.deleteActionAjax>
+                    
+		  <settings.datatables.action.bulkDeleteAction>
+			 <TCEforms>
+			  <label>Action to be called on bulkdelete (default: delete)</label>
+			  <config>
+			  <type>input</type>
+			  <size>60</size>
+              <default>delete</default>
+			  </config>
+			 </TCEforms>
+		  </settings.datatables.action.bulkDeleteAction>
+
+		  <settings.datatables.action.bulkDeleteActionAjax>
+			 <TCEforms>
+			  <label>AJAX calls via extbase_ajax for bulkDeleteAction (requires extbase_ajax)</label>
+			  <config>
+			  <type>check</type>
+			  </config>
+			 </TCEforms>
+		  </settings.datatables.action.bulkDeleteActionAjax>
+
+          <settings.datatables.action.customAction>
+			 <TCEforms>
+			  <label>Action to be called on custom</label>
+			  <config>
+			  <type>input</type>
+			  <size>60</size>
+			  </config>
+			 </TCEforms>
+		  </settings.datatables.action.customAction>
+
+		  <settings.datatables.action.customActionAjax>
+			 <TCEforms>
+			  <label>AJAX calls via extbase_ajax for customAction (requires extbase_ajax)</label>
+			  <config>
+			  <type>check</type>
+			  </config>
+			 </TCEforms>
+		  </settings.datatables.action.customActionAjax>
+
+          <settings.datatables.action.customActionImage>
+			 <TCEforms>
+			  <label>Image for custom action</label>
+			  <config>
+			  <type>input</type>
+			  <size>60</size>
+			  </config>
+			 </TCEforms>
+		  </settings.datatables.action.customActionImage>
+
+          <settings.datatables.action.customSaveButtonText>
+			 <TCEforms>
+			  <label>Custom save button text</label>
+			  <config>
+			  <type>input</type>
+			  <size>30</size>
+			  </config>
+			 </TCEforms>
+		  </settings.datatables.action.customSaveButtonText>
+
+          <settings.datatables.action.customCancelButtonText>
+			 <TCEforms>
+			  <label>Custom cancel button text</label>
+			  <config>
+			  <type>input</type>
+			  <size>30</size>
+			  </config>
+			 </TCEforms>
+		  </settings.datatables.action.customCancelButtonText>
+
+          <settings.datatables.action.topalign>
+            <TCEforms>
+              <label>Set vertical alignment of tablecells to top</label>
+              <config>
+                <type>check</type>
+              </config>
+            </TCEforms>
+          </settings.datatables.action.topalign>
+
+          <settings.datatables.usergroups>
+            <label>Tabledata will be shown to the following usergroups</label>
+            <config>
+              <type>select</type>
+              <unique>1</unique>
+              <items>
+                  <numIndex index="0">
+                      <numIndex index="0">Show at any login</numIndex>
+                      <numIndex index="1">-2</numIndex>
+                  </numIndex>
+                  <numIndex index="1">
+                      <numIndex index="0">__Usergroups:__</numIndex>
+                      <numIndex index="1">--div--</numIndex>
+                  </numIndex>
+              </items>
+              <renderType>selectMultipleSideBySide</renderType>
+              <foreign_table>fe_groups</foreign_table>
+              <maxitems>999</maxitems>
+              <size>6</size>
+              <multiple>1</multiple>
+            </config>                      
+          </settings.datatables.usergroups>
+
+		  <settings.datatables.action.limitQueriesToMainRepository>
+			 <TCEforms>
+			  <label>Limit queries to main repository</label>
+			  <config>
+			  <type>check</type>
+			  </config>
+			 </TCEforms>
+		  </settings.datatables.action.limitQueriesToMainRepository>
+
+          <settings.datatables.action.globalFilter>
+			 <TCEforms>
+			  <label>Global filter</label>
+			  <config>
+			  <type>input</type>
+			  <size>60</size>
+			  </config>
+			 </TCEforms>
+		  </settings.datatables.action.globalFilter>
+
+          <settings.datatables.action.addJoin>
+			 <TCEforms>
+			  <label>Additional JOIN</label>
+			  <config>
+			  <type>text</type>
+              <rows>10</rows>
+              <cols>80</cols>
+			  </config>
+			 </TCEforms>
+		  </settings.datatables.action.addJoin>
+
+          <settings.datatables.action.noheader>
+			 <TCEforms>
+			  <label>Disable header and footer (Caution: disables pagination as well!)</label>
+			  <config>
+			  <type>check</type>
+			  </config>
+			 </TCEforms>
+		  </settings.datatables.action.noheader>
+
+          <settings.datatables.showbutton.print>
+			 <TCEforms>
+			  <label>Show PRINT button on top of table</label>
+			  <config>
+			  <type>check</type>
+			  </config>
+			 </TCEforms>
+		  </settings.datatables.showbutton.print>
+
+          <settings.datatables.showbutton.download>
+			 <TCEforms>
+			  <label>Show DOWNLOAD button on top of table</label>
+			  <config>
+			  <type>check</type>
+			  </config>
+			 </TCEforms>
+		  </settings.datatables.showbutton.download>
+
+          <settings.datatables.download.name>
+			 <TCEforms>
+			  <label>Download filename and sheet</label>
+			  <config>
+			  <type>input</type>
+			  </config>
+			 </TCEforms>
+		  </settings.datatables.download.name>
+
+          <settings.datatables.showbutton.email>
+			 <TCEforms>
+			  <label>Show EMAIL button on top of table (additional configuration required)</label>
+			  <config>
+			  <type>check</type>
+			  </config>
+			 </TCEforms>
+		  </settings.datatables.showbutton.email>
+
+          <settings.datatables.showbutton.reload>
+			 <TCEforms>
+			  <label>Show RELOAD button on top of table</label>
+			  <config>
+			  <type>check</type>
+			  </config>
+			 </TCEforms>
+		  </settings.datatables.showbutton.reload>
+
+          <settings.datatables.showbutton.help>
+			 <TCEforms>
+			  <label>Show HELP button on bottom of table (displays SQL statement)</label>
+			  <config>
+			  <type>check</type>
+			  </config>
+			 </TCEforms>
+		  </settings.datatables.showbutton.help>
+          
+          <settings.datatables.disableglobalsearch>
+			 <TCEforms>
+			  <label>Disable global search field</label>
+			  <config>
+			  <type>check</type>
+			  </config>
+			 </TCEforms>
+		  </settings.datatables.disableglobalsearch>
+
+          <settings.datatables.order>
+			 <TCEforms>
+			  <label>Order expression</label>
+			  <config>
+			  <type>input</type>
+			  <size>60</size>
+              <default>[[0,"asc"]]</default>
+			  </config>
+			 </TCEforms>
+		  </settings.datatables.order>
+
+          <settings.datatables.action.debug>
+			 <TCEforms>
+			  <label>Debug queries (TYPO3_version >= 8.x)</label>
+			  <config>
+			  <type>check</type>
+			  </config>
+			 </TCEforms>
+		  </settings.datatables.action.debug>
+
+		  </el>
+		 </ROOT>
+      </sheet2>
+      <sheet3>
+        <ROOT>
+          <TCEforms>
+          <sheetTitle>Configuration</sheetTitle>
+          </TCEforms>
+          <type>array</type>
+          <el>
+            <settings.datatables.listView>
+              <TCEforms>
+                <label>Show attributes in list (save after selection)</label>
+                <config>
+                  <type>select</type>
+                  <itemsProcFunc>CGB\Datatables\UserFunc\FlexFormUserFunc->getProperties</itemsProcFunc>
+                  <maxitems>999</maxitems>
+                  <size>10</size>
+                </config>
+              </TCEforms>
+            </settings.datatables.listView>
+            
+            <settings.datatables.collapseProperties>
+               <TCEforms>
+                <label>List of sub properties to be collapsed in a subtable</label>
+                <config>
+                  <type>input</type>
+                  <size>60</size>
+                </config>
+               </TCEforms>
+            </settings.datatables.collapseProperties>
+            
+            <settings.datatables.config>
+              <section>1</section>
+              <type>array</type>
+              <el>
+                <record>
+                  <type>array</type>
+                  <title>Field detail</title>
+                  <el>
+                    <property>
+                      <TCEforms>
+                        <label>Select property</label>
+                        <config>
+                          <type>select</type>
+                          <itemsProcFunc>CGB\Datatables\UserFunc\FlexFormUserFunc->getSelectedProperties</itemsProcFunc>
+                          <size>1</size>
+                        </config>
+                      </TCEforms>
+                    </property>
+                    <customtitle>
+                      <TCEforms>
+                        <label>Custom title</label>
+                        <config>
+                          <type>input</type>
+                          <size>30</size>
+                        </config>
+                      </TCEforms>
+                    </customtitle>
+                    <customheader>
+                      <TCEforms>
+                        <label>Custom Header</label>
+                        <config>
+                          <type>input</type>
+                          <size>60</size>
+                        </config>
+                      </TCEforms>
+                    </customheader>
+                    <align>
+                      <TCEforms>
+                        <label>Align in table</label>
+                        <config>
+                          <type>select</type>
+                          <items type="array">
+                            <numIndex index="0" type="array">
+                              <numIndex index="0"></numIndex>
+                              <numIndex index="1"></numIndex>
+                            </numIndex>
+                            <numIndex index="1" type="array">
+                              <numIndex index="0">left</numIndex>
+                              <numIndex index="1">left</numIndex>
+                            </numIndex>
+                            <numIndex index="2" type="array">
+                              <numIndex index="0">center</numIndex>
+                              <numIndex index="1">center</numIndex>
+                            </numIndex>
+                            <numIndex index="3" type="array">
+                              <numIndex index="0">right</numIndex>
+                              <numIndex index="1">right</numIndex>
+                            </numIndex>
+                          </items>
+                          <size>1</size>
+                        </config>
+                      </TCEforms>
+                    </align>
+                    <showalways>
+                      <TCEforms>
+                        <label>Show Column always (responsive)</label>
+                        <config>
+                          <type>check</type>
+                        </config>
+                      </TCEforms>
+                    </showalways>
+                    <dontsort>
+                      <TCEforms>
+                        <label>Disable sorting in datatables</label>
+                        <config>
+                          <type>check</type>
+                        </config>
+                      </TCEforms>
+                    </dontsort>
+                    <showfirstchildonly>
+                      <TCEforms>
+                        <label>Show first child only</label>
+                        <config>
+                          <type>check</type>
+                        </config>
+                      </TCEforms>
+                    </showfirstchildonly>
+                    <searchColumn>
+                      <TCEforms>
+                        <label>Enable column search for this column</label>
+                        <config>
+                          <type>select</type>
+                          <items type="array">
+                            <numIndex index="0" type="array">
+                              <numIndex index="0"></numIndex>
+                              <numIndex index="1">0</numIndex>
+                            </numIndex>
+                            <numIndex index="1" type="array">
+                              <numIndex index="0">text</numIndex>
+                              <numIndex index="1">1</numIndex>
+                            </numIndex>
+                            <numIndex index="2" type="array">
+                              <numIndex index="0">select</numIndex>
+                              <numIndex index="1">2</numIndex>
+                            </numIndex>
+                          </items>
+                          <size>1</size>
+                        </config>
+                      </TCEforms>
+                    </searchColumn>
+                    <customSearchOptions>
+                      <TCEforms>
+                        <label>Custom Search Options (list of value:label pairs)</label>
+                        <config>
+                          <type>input</type>
+                          <size>100</size>
+                        </config>
+                      </TCEforms>
+                    </customSearchOptions>
+                    <virtualProperty>
+                      <TCEforms>
+                        <label>Virtual Property Settings (TYPO3_version >= 8.x)</label>
+                        <config>
+                          <type>input</type>
+                          <size>100</size>
+                        </config>
+                      </TCEforms>
+                    </virtualProperty>
+                    <cssclass>
+                      <TCEforms>
+                        <label>CSS Class</label>
+                        <config>
+                          <type>input</type>
+                          <size>30</size>
+                        </config>
+                      </TCEforms>
+                    </cssclass>
+                    <cssstyle>
+                      <TCEforms>
+                        <label>CSS Style</label>
+                        <config>
+                          <type>input</type>
+                          <size>30</size>
+                        </config>
+                      </TCEforms>
+                    </cssstyle>
+                    
+                    <formatcode>
+                      <TCEforms>
+                        <label>Format code</label>
+                        <config>
+                          <type>input</type>
+                          <size>100</size>
+                        </config>
+                      </TCEforms>
+                    </formatcode>
+                    
+                    <allowedusers>
+                      <label>The following users can see this column</label>
+                      <config>
+                        <type>select</type>
+                        <renderType>selectMultipleSideBySide</renderType>
+                        <foreign_table>fe_users</foreign_table>
+                        <maxitems>999</maxitems>
+                        <size>6</size>
+                        <multiple>1</multiple>
+                      </config>                      
+                    </allowedusers>
+                    <allowedgroups>
+                      <label>The following usergroups can see this column</label>
+                      <config>
+                        <type>select</type>
+                        <renderType>selectMultipleSideBySide</renderType>
+                        <foreign_table>fe_groups</foreign_table>
+                        <maxitems>999</maxitems>
+                        <size>6</size>
+                        <multiple>1</multiple>
+                      </config>                      
+                    </allowedgroups>
+                    
+                    <images>
+                      <label>Map integers to images</label>
+                      <config>
+                        <type>group</type>    
+                        <internal_type>file</internal_type>
+                        <allowed>jpg,gif,png</allowed>                   
+                        <show_thumbs>1</show_thumbs>
+                        <field>uid_local</field>
+                        <size>3</size>
+                        <minitems>0</minitems>
+                        <maxitems>999</maxitems>                      
+                      </config>                      
+                    </images>  
+                    
+                    <mapping>
+                      <label>Map element value (use {value} and {plainvalue}) to expression</label>
+                      <config>
+                        <type>input</type>
+                        <size>160</size>
+                      </config>                      
+                    </mapping>  
+                    
+                    <link>
+                      <label>Generate Link</label>
+                      <config>
+                        <type>input</type>
+                        <size>30</size>
+                      </config>                      
+                    </link>
+                  </el>
+                </record>
+              </el>
+            </settings.datatables.config>
+          </el>
+        </ROOT>
+      </sheet3>
+      
+	</sheets>
+</T3DataStructure>

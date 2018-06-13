@@ -1,0 +1,23 @@
+
+plugin.tx_datatables_datatable {
+	view {
+		# cat=plugin.tx_datatables_datatable/file; type=string; label=Path to template root (FE)
+		templateRootPath = EXT:datatables/Resources/Private/Templates/
+		# cat=plugin.tx_datatables_datatable/file; type=string; label=Path to template partials (FE)
+		partialRootPath = EXT:datatables/Resources/Private/Partials/
+		# cat=plugin.tx_datatables_datatable/file; type=string; label=Path to template layouts (FE)
+		layoutRootPath = EXT:datatables/Resources/Private/Layouts/
+	}
+	persistence {
+		# cat=plugin.tx_datatables_datatable//a; type=string; label=Default storage PID
+		storagePid =
+	}
+
+    settings {
+        # cat=plugin.tx_datatables_datatable//y; type=int+; label=ID for AJAX calls.
+        ajaxCallId = 1200
+
+        # cat=plugin.tx_datatables_datatable//z; type=boolean; label=Enable autoAjax feature from extbase_ajax.
+        autoAjax = 0
+    }
+}

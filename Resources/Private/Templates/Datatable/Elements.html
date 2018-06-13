@@ -1,0 +1,264 @@
+{namespace dt=CGB\Datatables\ViewHelpers}
+{namespace h=Helhum\TyposcriptRendering\ViewHelpers}
+
+<f:switch expression="{property}">
+  <f:case value="CUSTOM">
+    <f:if condition="{settings.datatables.action.customActionAjax}">
+      <f:then>
+        <f:image class="modalDialog"
+          src="{settings.datatables.action.customActionImage}" 
+          alt="{alt}" 
+          title="{title}" 
+          additionalAttributes="{
+            onshow: \" 
+              ; 
+              \",
+
+            onsave: \" 
+              ; 
+              \",
+              
+            savetext: \" 
+              {settings.datatables.action.customSaveButtonText}
+              \",
+              
+            canceltext: \" 
+              {settings.datatables.action.customCancelButtonText}
+              \",
+              
+            wwidth: \"
+              700px
+              \",
+
+            uri:\"
+              {h:uri.ajaxAction(
+                extensionName: '{settings.extKey}',
+                controller: '{settings.datatables.domainModelName}',
+                pluginName: '{settings.datatables.action.ajaxPlugin}',
+                action: '{settings.datatables.action.customAction}',
+                arguments: '{parameter}'
+              )} \"
+          }"
+        />              
+      </f:then>
+      <f:else>
+        <dt:link
+          id="{settings.name}_custom_{uid}" 
+          target="_blank" 
+          action="{settings.datatables.action.customAction}"
+          controller="{settings.datatables.domainModelName}" 
+          extensionName="{settings.extKey}" 
+          pluginName="{settings.datatables.action.contentPlugin}" 
+          pageUid="{settings.datatables.action.pageUid}" 
+          arguments="{parameter}"
+          objectname="{settings.name}" 
+          objectuid="{uid}" 
+          absolute="TRUE" >
+          <f:image 
+            class="button datatables-custom"
+            src="{settings.datatables.action.customActionImage}" 
+            alt="{alt}" title="{title}" 
+          />
+        </dt:link>
+      </f:else>  
+    </f:if>
+  </f:case>
+  <f:case value="EDIT BUTTON">
+    <f:if condition="{settings.datatables.action.editActionAjax}">
+      <f:then>
+        <f:image class="modalDialog"
+          src="EXT:core/Resources/Public/Icons/T3Icons/actions/actions-open.svg" 
+          alt="{alt}" 
+          title="{title}" 
+          additionalAttributes="{
+            onshow: \" 
+              ; 
+              \",
+
+            onsave: \" 
+              ; 
+              \",
+              
+            wwidth: \"
+              700px
+              \",
+
+            uri:\"
+              {h:uri.ajaxAction(
+                extensionName: '{settings.extKey}',
+                controller: '{settings.datatables.domainModelName}',
+                pluginName: '{settings.datatables.action.ajaxPlugin}',
+                action: '{settings.datatables.action.editAction}',
+                arguments: '{parameter}'
+              )} \"
+          }"
+        />              
+      </f:then>
+      <f:else>
+        <dt:link
+          id="{settings.name}_edit_{uid}" 
+          target="_blank" 
+          action="{settings.datatables.action.editAction}"
+          controller="{settings.datatables.domainModelName}" 
+          extensionName="{settings.extKey}" 
+          pluginName="{settings.datatables.action.contentPlugin}" 
+          pageUid="{settings.datatables.action.pageUid}" 
+          arguments="{parameter}"
+          objectname="{settings.name}" 
+          objectuid="{uid}" 
+          absolute="TRUE" >
+          <f:image 
+            class="button datatables-edit"
+            src="EXT:core/Resources/Public/Icons/T3Icons/actions/actions-open.svg" 
+            alt="{alt}" title="{title}" 
+          />
+        </dt:link>
+      </f:else>  
+    </f:if>
+  </f:case>
+  <f:case value="SHOW BUTTON">
+    <f:if condition="{settings.datatables.action.showActionAjax}">
+      <f:then>
+        <f:image class="modalMessage"
+          src="EXT:core/Resources/Public/Icons/T3Icons/actions/actions-document-view.svg" 
+          alt="{alt}" 
+          title="{title}" 
+          additionalAttributes="{
+            onshow: \" 
+              ; 
+              \",
+
+            onsave: \" 
+              ; 
+              \",
+              
+            wwidth: \"
+              700px
+              \",
+
+            uri:\"
+              {h:uri.ajaxAction(
+                extensionName: '{settings.extKey}',
+                controller: '{settings.datatables.domainModelName}',
+                pluginName: '{settings.datatables.action.ajaxPlugin}',
+                action: '{settings.datatables.action.showAction}',
+                arguments: '{parameter}'
+              )} \"
+          }"
+        />              
+      </f:then>
+      <f:else>
+        <dt:link
+          id="{settings.name}_edit_{uid}" 
+          target="_blank" 
+          action="{settings.datatables.action.showAction}"
+          controller="{settings.datatables.domainModelName}" 
+          extensionName="{settings.extKey}" 
+          pluginName="{settings.datatables.action.ajaxPlugin}" 
+          pageUid="{settings.datatables.action.pageUid}" 
+          arguments="{parameter}"
+          objectname="{settings.name}" 
+          objectuid="{uid}" 
+          absolute="TRUE" >
+          <f:comment>
+            <span class="ion-eye" style="font-size: 16px;"></span>
+          </f:comment>
+          <f:image 
+            class="button datatables-edit"
+            src="EXT:core/Resources/Public/Icons/T3Icons/actions/actions-document-view.svg" 
+            alt="{alt}" title="{title}" 
+          />
+        </dt:link>
+      </f:else>  
+    </f:if>
+  </f:case>
+  <f:case value="DELETE BUTTON">
+    <f:if condition="{settings.datatables.action.deleteActionAjax}">
+      <f:then>
+        <f:image class="modalConfirm"
+          src="EXT:core/Resources/Public/Icons/T3Icons/actions/actions-delete.svg" 
+          alt="{alt}" 
+          title="{title}" 
+          additionalAttributes="{
+            onconfirm: \"
+              $('#tx_datatables-{settings.name}Table').DataTable().ajax.reload();
+              \",
+            
+            onshow: \" 
+              ; 
+              \",
+
+            onsave: \" 
+              ; 
+              \",
+              
+            wwidth: \"
+              700px
+              \",
+
+            uri:\"
+              {h:uri.ajaxAction(
+                extensionName: '{settings.extKey}',
+                controller: '{settings.datatables.domainModelName}',
+                pluginName: '{settings.datatables.action.ajaxPlugin}',
+                action: '{settings.datatables.action.deleteAction}',
+                arguments: '{parameter}'
+              )} \"
+          }"
+        />              
+        
+      </f:then>
+      <f:else>
+        <dt:link
+          id="{settings.name}_delete_{uid}" 
+          action="{settings.datatables.action.deleteAction}" 
+          controller="{settings.datatables.domainModelName}" 
+          extensionName="{settings.extKey}" 
+          pluginName="{settings.name}" 
+          pageUid="{settings.datatables.action.pageUid}" 
+          arguments="{parameter}"
+          objectname="{settings.name}" 
+          objectuid="{uid}" 
+          absolute="TRUE" 
+          onclick="return false;">
+          <f:image 
+            class="button datatables-delete" 
+            src="EXT:core/Resources/Public/Icons/T3Icons/actions/actions-delete.svg" 
+            alt="{alt}" title="{title}" 
+            additionalAttributes="{
+              data-toggle: 'modal', 
+              data-target: '#modalConfirm', 
+              data-uid: '{uid}', 
+              data-linkrefid: '{settings.name}_delete_{uid}',
+              data-rowid: '{settings.name}_{uid}'
+            }"
+          />
+        </dt:link>
+      </f:else>
+    </f:if>
+  </f:case>
+  <f:case value="CHECKBOX">
+     <f:form.checkbox value="{uid}" class="tx_datatables-deleteRow" />
+  </f:case>
+  
+  <f:case value="CUSTOM">
+    {header.mapping} 
+  </f:case>
+  
+  <f:case default="TRUE">&nbsp;</f:case>
+  
+  
+</f:switch>
+
+
+<f:comment>
+                {f:uri.action(
+                pageType: '{settings.datatables.action.ajaxPageType}', 
+                extensionName: '{settings.extKey}', 
+                pluginName: '{settings.datatables.action.ajaxPlugin}', 
+                controller: '{settings.datatables.domainModelName}', 
+                action: '{settings.datatables.action.editAction}',
+                arguments: '{parameter}'
+              )} \"
+
+</f:comment>

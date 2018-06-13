@@ -1,0 +1,116 @@
+{namespace dt=CGB\Datatables\ViewHelpers}
+{namespace v=FluidTYPO3\Vhs\ViewHelpers}
+
+<f:layout name="Default" />
+
+This Template is responsible for creating a table of domain objects.
+
+If you modify this template, do not forget to change the overwrite settings
+in /Configuration/ExtensionBuilder/settings.yaml:
+  Resources:
+    Private:
+      Templates:
+        List.html: keep
+
+Otherwise your changes will be overwritten the next time you save the extension in the extension builder
+
+<f:section name="main">
+  
+  <style>
+    .tx_datatables-table-print th {
+      font-family: Arial,Helvetiga, sans-serif;
+      font-size: 14px;
+      line-height: 20px;
+      padding: 2px 0;
+    }
+    
+    .tx_datatables-table-print td {
+      font: 12px/16px Arial, Helvetica, sans-serif;
+      padding: 2px 0;
+    }
+
+    .tx_datatables-table-print table {
+      border-collapse: collapse;
+      border: 1px solid grey;
+    }
+
+    .tx_datatables-table-print table td,
+    .tx_datatables-table-print table th {
+      border: 1px solid grey;
+      padding: 2px 4px;
+    }    
+    
+    .tx_datatables-table-print table .dt-,
+    .tx_datatables-table-print table thead tr th .dt-,
+    .tx_datatables-table-print table .dt-left,
+    .tx_datatables-table-print table thead tr th .dt-left {
+      text-align: left;
+    }
+
+    .tx_datatables-table-print table .dt-right,
+    .tx_datatables-table-print table thead tr th .dt-right {
+      text-align: right;
+    }
+    
+    .tx_datatables-table-print table .dt-center, 
+    .tx_datatables-table-print table thead tr th .dt-center {
+      text-align: center;
+    }
+    
+    .tx_datatables-table-print table td span {
+      width: 100%;
+      display: inline-block;
+      padding: 1px;
+    }
+    
+    .dt-right {
+      text-align: right;
+    }
+    
+    .dt-center {
+      text-align: center;
+    }
+    
+  </style>
+  
+  <h1>{settings.datatables.domainModelName}: <f:count subject="{tableData}" /></h1>
+
+  
+  
+  <f:if condition="{loggedin}">
+    <div class="tx_datatables-table-print">
+      <table>
+        <thead>
+          <tr>
+            <f:for each="{headerList}" key="property" as="data">
+              <f:if condition="{data.noaccess}==0">
+                <th class="{data.cssclass} dt-{data.align}"> 
+                  <f:switch expression="{property}">
+                    <f:case value="CHECKBOX">
+                      
+                    </f:case>
+                    <f:case default="TRUE">{data.header}</f:case>
+                  </f:switch>  
+                </th>
+              </f:if>
+            </f:for>
+          </tr>
+        </thead>
+        
+        <tbody>
+          <f:for each="{tableData}" key="key" as="row">
+            <tr>
+              <f:for each="{headerList}" iteration="iterator" as="data">
+                <f:if condition="{data.noaccess}==0">
+                  <td class="{data.cssclass} dt-{data.align}">
+                    <f:format.htmlentitiesDecode><dt:col row="{row}" index="{iterator.index}" /></f:format.htmlentitiesDecode>
+                  </td>
+                </f:if>
+              </f:for>
+            </tr>
+          </f:for>
+        </tbody>
+      </table>
+    </div>
+  </f:if>
+</f:section>

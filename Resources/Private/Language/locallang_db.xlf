@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<xliff version="1.0">
+	<file source-language="en" datatype="plaintext" original="messages" date="2017-10-21T15:53:37Z" product-name="datatables">
+		<header/>
+		<body>
+			<trans-unit id="tx_datatables_domain_model_datatable">
+				<source>Datatable</source>
+			</trans-unit>
+			<trans-unit id="tx_datatables_domain_model_datatable.ce">
+				<source>Datatables</source>
+			</trans-unit>
+			<trans-unit id="tx_datatables_domain_model_datatable.description.ce">
+				<source>A highly configurable plugin tor table display of data stored in extension repositories. Works with most repositories out of the box, if the domain model implements the required getters for the domain model object. Based on jQuery datatables plugin.</source>
+			</trans-unit>
+		</body>
+	</file>
+</xliff>
