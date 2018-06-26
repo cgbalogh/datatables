@@ -297,6 +297,24 @@ class FlexFormUserFunc {
                 $dontDiveIntoObject = $reflection->isTaggedWith('datatablesdontdive');
             }
             
+            // at the moment these repos are hardcoded.
+            // this should be replaced by using the t3 BE functions
+            if ($childTableName == '') {
+              switch ($childClassName) {
+                case 'TYPO3\\CMS\\Extbase\\Domain\\Model\\FileReference':
+                  // $childTableName = 'sys_file_reference';
+                  break;
+                case 'CGB\\Relax5core\\Domain\\Model\\Owner':
+                case 'TYPO3\\CMS\\Extbase\\Domain\\Model\\FrontendUser':
+                  $childTableName = 'fe_users';
+                  break;
+                case 'TYPO3\\CMS\\Extbase\\Domain\\Model\\FrontendUserGroup':
+                  $childTableName = 'fe_groups';
+                  break;
+              }
+            }
+            
+            // echo " ### $tableName $fieldName $childClassName - $childTableName ~~~";
             if ( ($level < 4) && $childTableName && ($classList[$childClassName] <= 1) && (! $dontDiveIntoObject))  {
 //                $classList[] = $class; 
                 $childPropertyList = self::getPropertyListFromClassName ( $childClassName, $classList, $noHeaders, $level );
@@ -335,6 +353,8 @@ class FlexFormUserFunc {
             $className = 'TYPO3\\CMS\\Extbase\\Domain\\Model\\FileReference';
         } elseif ($tableName == 'fe_users') {
             $className = 'TYPO3\\CMS\\Extbase\\Domain\\Model\\FrontendUser';
+        } elseif ($tableName == 'fe_groups') {
+            $className = 'TYPO3\\CMS\\Extbase\\Domain\\Model\\FrontendUserGroup';
         } else {
             $extFromTablename = ucfirst(explode('_', $tableName)[1]);
                     

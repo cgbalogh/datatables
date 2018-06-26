@@ -1,0 +1,20 @@
+{
+    "elements": {
+        "f:layout": {
+            "attributes": {
+                "name": {}
+            }
+        },
+        "f:section": {
+            "attributes": {
+                "name": {}
+            }
+        },
+        "f:if": {
+            "attributes": {
+                "condition": {}
+            }
+        }
+    },
+    "attributes": {}
+}

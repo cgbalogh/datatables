@@ -21,7 +21,7 @@ $EM_CONF[$_EXTKEY] = array(
 	'uploadfolder' => '0',
 	'createDirs' => '',
 	'clearCacheOnLoad' => 0,
-    'version' => '8.7.2-rc80531',
+    'version' => '8.7.8-180626',
 	'constraints' => array(
 		'depends' => array(
 			'typo3' => '7.6.0-8.9.99',
@@ -34,6 +34,9 @@ $EM_CONF[$_EXTKEY] = array(
 );
 
 /**
+ * 8.7.8-180626
+ * added support for fe_users and fe_groups
+ * 
  * 8.7.2-rc80531
  * added image translation for boolean types
  * 
