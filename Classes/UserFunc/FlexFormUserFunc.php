@@ -326,6 +326,8 @@ class FlexFormUserFunc {
                     // append header context only if $noHeader is false
                     if (! $noHeaders) {
                         $headerSuffix = '#' . self::convertClassNameToTableName($childClassName);
+                            // self::getExtFromClassName($class);
+                        // self::convertClassNameToTableName($childClassName) .
                     }
                     // if ($childTableName == 'tx_dastool_domain_model_kontakt') echo $childClassName;
                     
@@ -394,4 +396,21 @@ class FlexFormUserFunc {
         return '';
     }
 
+    /**
+     * 
+     * @param string $class
+     */
+    static function getExtFromClassName($class) {
+         $classExploded = \explode('\\', $class);
+        if ($classExploded[0] !== 'TYPO3') {
+          
+            $extKey = \TYPO3\CMS\Core\Utility\GeneralUtility::camelCaseToLowerCaseUnderscored ($classExploded[1]);
+            return $extKey;
+        }
+        
+        return '';
+     
+    }
+
+    
 }

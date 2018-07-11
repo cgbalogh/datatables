@@ -71,203 +71,210 @@ Otherwise your changes will be overwritten the next time you save the extension 
   </div>
 
 
-  <f:if condition="{loggedin}">
-    <div class="tx_datatables-table-responsive">
-      <f:if condition="0{settings.datatables.showbutton.print} || 0{settings.datatables.showbutton.download} || 0{settings.datatables.showbutton.email}">
-        <div class="dt-buttons" style="text-align: right; width: 100%;">
-          <f:if condition="{settings.datatables.showbutton.print}">
-            <a href="#" onclick="window.open(printUrl('tx_datatables-{settings.name}Table-{settings.cobj}'), 'print', 'width=800, height=600, top=200 left=20'); return false;">
-              <span 
-                style="font-size: 20px; padding: 1px 3px;"
-                class="texticon-inner-icon ion ion-ios-printer-outline dt-button"></span>
-            </a>
-          </f:if>
-          
-          <f:if condition="{settings.datatables.showbutton.download}">
-            <a href="#" onclick="window.location.href=exportUrl('tx_datatables-{settings.name}Table-{settings.cobj}')">
-              <span 
-                style="font-size: 20px; padding: 1px 3px;"
-                class="texticon-inner-icon ion ion-ios-download-outline dt-button"></span>
-            </a>
-          </f:if>
-          
-          <f:if condition="{settings.datatables.showbutton.email}">
-            <span 
-              style="font-size: 20px; padding: 1px 3px;cursor: pointer;"
-              class="texticon-inner-icon ion ion-ios-email-outline dt-button"
-              onclick=""
-            >
-            </span>
-          </f:if>
-          
-          <f:if condition="{settings.datatables.showbutton.reload}">
-            <a href="#" onclick="$(this).parent().parent().find('.dataTable').DataTable().ajax.reload(null, false);return false;" class="refresh">
-              <span 
-                style="font-size: 20px; padding: 1px 3px;"
-                class="texticon-inner-icon ion ion-ios-refresh-outline dt-button"></span>
-            </a>
-          </f:if>
-          
-        </div>
-      </f:if>
+  <f:if condition="{loggedin} || {settings.datatables.nologin}">
+    <f:then>
+      <div class="tx_datatables-table-responsive">
+        <f:if condition="0{settings.datatables.showbutton.print} || 0{settings.datatables.showbutton.download} || 0{settings.datatables.showbutton.email}">
+          <div class="dt-buttons" style="text-align: right; width: 100%;">
+            <f:if condition="{settings.datatables.showbutton.print}">
+              <a href="#" onclick="window.open(printUrl('tx_datatables-{settings.name}Table-{settings.cobj}'), 'print', 'width=800, height=600, top=200 left=20'); return false;">
+                <span 
+                  style="font-size: 20px; padding: 1px 3px;"
+                  class="texticon-inner-icon ion ion-ios-printer-outline dt-button"></span>
+              </a>
+            </f:if>
 
-      <table id="tx_datatables-{settings.name}Table-{settings.cobj}" class="dataTable tx_datatables-datatable tx_datatables-noheader{settings.datatables.action.noheader}" cobjuid="{settings.cobj}" dtfilter="{dtfilter}" globalfilter="{settings.datatables.action.globalFilter}" data="{data}">
-        <thead>
-          <tr class='dtsearch-row dtsearch-row-header' style="display: none;">
-            <f:for each="{headerList}" key="property" as="data" iteration="iterator">
-              <f:if condition="{data.noaccess}==0">
-                <td class="dtsearch-cell dt-{data.align}" _property="{data._property}" _id="{data._id}" _index="{iterator.index}" searchColumn="{data.searchColumn}" searchoptions="{data.searchoptions}" style="{data.cssstyle}">
-                  &nbsp;
-                </td>
-              </f:if>
-            </f:for>
-          </tr>
-          <tr>
-            <f:for each="{headerList}" key="property" as="data" iteration="iterator">
-              <f:if condition="{data.noaccess}==0">
-                <th class="{data.cssclass} {f:if(condition:data.showalways,then:'all')} dt-{data.align}" dtall="{data.showalways}" dtdontsort="{data.dontsort}" dtclass="{data.cssclass}" dtalign="dt-{data.align}" _property="{data._property}" _id="{data._id}" _index="{iterator.index}">
-                  <f:switch expression="{property}">
-                    <f:case value="CHECKBOX">
-                      <f:form.checkbox value="1" class="tx_datatables-bulkDelete" id="tx_datatables-{settings.name}_bulkDelete" /> 
-                    </f:case>
-                    <f:defaultCase>{data.header}</f:defaultCase>
-                  </f:switch>  
-                </th>
-              </f:if>
-            </f:for>
-          </tr>
-        </thead>
-        
-        <tfoot>
-          <tr>
-            <f:for each="{headerList}" key="property" as="data" iteration="iterator">
-              <f:if condition="{data.noaccess}==0">
-              <td class="{data.cssclass} dt-{data.align}" _property="{data._property}" _id="{data._id}" searchColumn="{data.searchColumn}">
-                <f:if condition="{settings.datatables.action.newColumn}=={iterator.index}"> 
-                    <f:if condition="{settings.datatables.action.newActionAjax}">
+            <f:if condition="{settings.datatables.showbutton.download}">
+              <a href="#" onclick="window.location.href=exportUrl('tx_datatables-{settings.name}Table-{settings.cobj}')">
+                <span 
+                  style="font-size: 20px; padding: 1px 3px;"
+                  class="texticon-inner-icon ion ion-ios-download-outline dt-button"></span>
+              </a>
+            </f:if>
+
+            <f:if condition="{settings.datatables.showbutton.email}">
+              <span 
+                style="font-size: 20px; padding: 1px 3px;cursor: pointer;"
+                class="texticon-inner-icon ion ion-ios-email-outline dt-button"
+                onclick=""
+              >
+              </span>
+            </f:if>
+
+            <f:if condition="{settings.datatables.showbutton.reload}">
+              <a href="#" onclick="$(this).parent().parent().find('.dataTable').DataTable().ajax.reload(null, false);return false;" class="refresh">
+                <span 
+                  style="font-size: 20px; padding: 1px 3px;"
+                  class="texticon-inner-icon ion ion-ios-refresh-outline dt-button"></span>
+              </a>
+            </f:if>
+
+          </div>
+        </f:if>
+
+        <table id="tx_datatables-{settings.name}Table-{settings.cobj}" class="dataTable tx_datatables-datatable tx_datatables-noheader{settings.datatables.action.noheader}" cobjuid="{settings.cobj}" dtfilter="{dtfilter}" globalfilter="{settings.datatables.action.globalFilter}" data="{data}">
+          <thead>
+            <tr class='dtsearch-row dtsearch-row-header' style="display: none;">
+              <f:for each="{headerList}" key="property" as="data" iteration="iterator">
+                <f:if condition="{data.noaccess}==0">
+                  <td class="dtsearch-cell dt-{data.align}" _property="{data._property}" _id="{data._id}" _index="{iterator.index}" searchColumn="{data.searchColumn}" searchoptions="{data.searchoptions}" style="{data.cssstyle}">
+                    &nbsp;
+                  </td>
+                </f:if>
+              </f:for>
+            </tr>
+            <tr>
+              <f:for each="{headerList}" key="property" as="data" iteration="iterator">
+                <f:if condition="{data.noaccess}==0">
+                  <th class="{data.cssclass} {f:if(condition:data.showalways,then:'all')} dt-{data.align}" dtall="{data.showalways}" dtdontsort="{data.dontsort}" dtclass="{data.cssclass}" dtalign="dt-{data.align}" _property="{data._property}" _id="{data._id}" _index="{iterator.index}">
+                    <f:switch expression="{property}">
+                      <f:case value="CHECKBOX">
+                        <f:form.checkbox value="1" class="tx_datatables-bulkDelete" id="tx_datatables-{settings.name}_bulkDelete" /> 
+                      </f:case>
+                      <f:defaultCase>{data.header}</f:defaultCase>
+                    </f:switch>  
+                  </th>
+                </f:if>
+              </f:for>
+            </tr>
+          </thead>
+
+          <tfoot>
+            <tr>
+              <f:for each="{headerList}" key="property" as="data" iteration="iterator">
+                <f:if condition="{data.noaccess}==0">
+                <td class="{data.cssclass} dt-{data.align}" _property="{data._property}" _id="{data._id}" searchColumn="{data.searchColumn}">
+                  <f:if condition="{settings.datatables.action.newColumn}=={iterator.index}"> 
+                      <f:if condition="{settings.datatables.action.newActionAjax}">
+                        <f:then>
+                          <f:image
+                            class="modalDialog rlx5-button rlx5-edit"
+                            src="EXT:core/Resources/Public/Icons/T3Icons/actions/actions-add.svg" 
+                            alt="" 
+                            title="{f:translate(key:'tx_datatables.new')}" 
+                            additionalAttributes="{
+                              onshow: \" 
+                                ; 
+                                \",
+
+                              onsave: \" 
+                                $('.dataTable').DataTable().ajax.reload(); 
+                                \",
+
+                              uri:\"
+                                {h:uri.ajaxAction(
+                                  extensionName: '{settings.extKey}',
+                                  controller: '{settings.datatables.domainModelName}',
+                                  pluginName: '{settings.datatables.action.ajaxPlugin}',
+                                  action: '{settings.datatables.action.newAction}'
+                                )} \"
+                            }"
+                          />
+
+                        </f:then>
+                        <f:else>
+                          <f:link.action 
+                            target="_blank" 
+                            pageUid="{settings.datatables.action.pageUid}" 
+                            pluginName="{settings.datatables.action.ajaxPlugin}" 
+                            extensionName="{settings.extKey}"
+                            controller="{settings.datatables.domainModelName}" 
+                            action="{settings.datatables.action.newAction}" >
+                            <f:image class="button" 
+                              src="EXT:core/Resources/Public/Icons/T3Icons/actions/actions-add.svg" 
+                              alt="{alt}" title="{title}" />
+                          </f:link.action>
+                        </f:else>
+                      </f:if>
+                  </f:if>
+                  <f:if condition="{property}=='CHECKBOX'">
+                    <f:if condition="{settings.datatables.action.bulkDeleteActionAjax}">
                       <f:then>
-                        <f:image
-                          class="modalDialog rlx5-button rlx5-edit"
-                          src="EXT:core/Resources/Public/Icons/T3Icons/actions/actions-add.svg" 
-                          alt="" 
-                          title="{f:translate(key:'tx_datatables.new')}" 
+                        <f:image class="modalConfirm tx_datatables-deleteTriger"
+                          src="EXT:core/Resources/Public/Icons/T3Icons/actions/actions-delete.svg" 
+                          alt="{alt}" 
+                          title="{title}" 
                           additionalAttributes="{
-                            onshow: \" 
-                              ; 
-                              \",
-
-                            onsave: \" 
-                              $('.dataTable').DataTable().ajax.reload(); 
-                              \",
-
-                            uri:\"
-                              {h:uri.ajaxAction(
-                                extensionName: '{settings.extKey}',
-                                controller: '{settings.datatables.domainModelName}',
-                                pluginName: '{settings.datatables.action.ajaxPlugin}',
-                                action: '{settings.datatables.action.newAction}'
-                              )} \"
-                          }"
-                        />
-
+                            extbaseajax: '
+                              action : \'{settings.datatables.action.bulkDeleteAction}\', 
+                              controller : \'{settings.datatables.domainModelName}\', 
+                              {settings.name}: \'uidlist\', 
+                              cobj: \'{cobj}\' ', 
+                            text: 'Delete?',
+                            beforeshow: 'uidlist = getSelectedRecords($(\'#tx_datatables-{settings.name}Table\'));',
+                            onconfirm: '$(\'#tx_datatables-{settings.name}Table\').DataTable().ajax.reload();'
+                        }" />              
                       </f:then>
                       <f:else>
-                        <f:link.action 
-                          target="_blank" 
-                          pageUid="{settings.datatables.action.pageUid}" 
-                          pluginName="{settings.datatables.action.ajaxPlugin}" 
-                          extensionName="{settings.extKey}"
+                        <dt:link
+                          id="{settings.name}_bulkDelete" 
+                          action="{settings.datatables.action.bulkDeleteAction}" 
                           controller="{settings.datatables.domainModelName}" 
-                          action="{settings.datatables.action.newAction}" >
-                          <f:image class="button" 
-                            src="EXT:core/Resources/Public/Icons/T3Icons/actions/actions-add.svg" 
-                            alt="{alt}" title="{title}" />
-                        </f:link.action>
+                          extensionName="{settings.extKey}" 
+                          pluginName="{settings.name}" 
+                          pageUid="{settings.datatables.action.pageUid}" 
+                          objectname="{settings.name}" 
+                          objectuid="UIDLIST" 
+                          absolute="TRUE" 
+                          noCacheHash="TRUE"
+                          onclick="uidlist=getSelectedRecords($('#tx_datatables-{settings.name}Table'));$('#bulkdelete-img').attr('data-uidlist',uidlist);return false;">
+                          <f:image 
+                            id="bulkdelete-img"
+                            class="button datatables-delete" 
+                            src="EXT:core/Resources/Public/Icons/T3Icons/actions/actions-delete.svg" 
+                            alt="{alt}" title="{title}" 
+                            additionalAttributes="{
+                              'data-toggle': 'modal', 
+                              'data-target': '#modalConfirm', 
+                              'data-uidlist': '', 
+                              'data-linkrefid':'{settings.name}_bulkDelete', 
+                              'data-rowid':'{settings.name}_{uid}'
+                            }"
+                          />
+                        </dt:link>
                       </f:else>
                     </f:if>
+                  </f:if>  
+                </td>
                 </f:if>
-                <f:if condition="{property}=='CHECKBOX'">
-                  <f:if condition="{settings.datatables.action.bulkDeleteActionAjax}">
-                    <f:then>
-                      <f:image class="modalConfirm tx_datatables-deleteTriger"
-                        src="EXT:core/Resources/Public/Icons/T3Icons/actions/actions-delete.svg" 
-                        alt="{alt}" 
-                        title="{title}" 
-                        additionalAttributes="{
-                          extbaseajax: '
-                            action : \'{settings.datatables.action.bulkDeleteAction}\', 
-                            controller : \'{settings.datatables.domainModelName}\', 
-                            {settings.name}: \'uidlist\', 
-                            cobj: \'{cobj}\' ', 
-                          text: 'Delete?',
-                          beforeshow: 'uidlist = getSelectedRecords($(\'#tx_datatables-{settings.name}Table\'));',
-                          onconfirm: '$(\'#tx_datatables-{settings.name}Table\').DataTable().ajax.reload();'
-                      }" />              
-                    </f:then>
-                    <f:else>
-                      <dt:link
-                        id="{settings.name}_bulkDelete" 
-                        action="{settings.datatables.action.bulkDeleteAction}" 
-                        controller="{settings.datatables.domainModelName}" 
-                        extensionName="{settings.extKey}" 
-                        pluginName="{settings.name}" 
-                        pageUid="{settings.datatables.action.pageUid}" 
-                        objectname="{settings.name}" 
-                        objectuid="UIDLIST" 
-                        absolute="TRUE" 
-                        noCacheHash="TRUE"
-                        onclick="uidlist=getSelectedRecords($('#tx_datatables-{settings.name}Table'));$('#bulkdelete-img').attr('data-uidlist',uidlist);return false;">
-                        <f:image 
-                          id="bulkdelete-img"
-                          class="button datatables-delete" 
-                          src="EXT:core/Resources/Public/Icons/T3Icons/actions/actions-delete.svg" 
-                          alt="{alt}" title="{title}" 
-                          additionalAttributes="{
-                            'data-toggle': 'modal', 
-                            'data-target': '#modalConfirm', 
-                            'data-uidlist': '', 
-                            'data-linkrefid':'{settings.name}_bulkDelete', 
-                            'data-rowid':'{settings.name}_{uid}'
-                          }"
-                        />
-                      </dt:link>
-                    </f:else>
-                  </f:if>
-                </f:if>  
-              </td>
-              </f:if>
-            </f:for>
-          </tr>
-        </tfoot>
-        
-        <tbody id="dt-mainbody">
-          <tr>
-            <f:for each="{headerList}" as="data">
-              <f:if condition="{data.noaccess}==0">
-                <td></td>
-              </f:if>
-            </f:for>
-          </tr>
-        </tbody>
-      </table>
-      
-      <f:if condition="{settings.datatables.showbutton.help}">
-        <div class="dt-buttons" style="text-align: right; width: 100%;">
-          <a href="#" onclick="
-            $sqlDiv = $('#' + $(this).parent().parent().find('.dataTable').attr('id') + '-sql');
-            $sqlDiv.toggle();
-            return false;
-            ">
-            <span 
-              style="font-size: 20px; padding: 1px 3px;"
-              class="texticon-inner-icon ion ion-ios-help-outline dt-button"></span>
-          </a>
-          
-        </div>
-      </f:if>
-      
-      
-    </div>
+              </f:for>
+            </tr>
+          </tfoot>
+
+          <tbody id="dt-mainbody">
+            <tr>
+              <f:for each="{headerList}" as="data">
+                <f:if condition="{data.noaccess}==0">
+                  <td></td>
+                </f:if>
+              </f:for>
+            </tr>
+          </tbody>
+        </table>
+
+        <f:if condition="{settings.datatables.showbutton.help}">
+          <div class="dt-buttons" style="text-align: right; width: 100%;">
+            <a href="#" onclick="
+              $sqlDiv = $('#' + $(this).parent().parent().find('.dataTable').attr('id') + '-sql');
+              $sqlDiv.toggle();
+              return false;
+              ">
+              <span 
+                style="font-size: 20px; padding: 1px 3px;"
+                class="texticon-inner-icon ion ion-ios-help-outline dt-button"></span>
+            </a>
+
+          </div>
+        </f:if>
+
+
+      </div>
+    </f:then>
+    <f:else>
+      <p class="bodytext">
+        datatables: You are not logged in!
+      </p>
+    </f:else>
   </f:if>
   
   <div id="tx_datatables-{settings.name}Table-{settings.cobj}-sql" class="tx_datatables-sql">

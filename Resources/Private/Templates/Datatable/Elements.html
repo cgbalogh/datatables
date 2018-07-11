@@ -32,7 +32,7 @@
 
             uri:\"
               {h:uri.ajaxAction(
-                extensionName: '{settings.extKey}',
+                extensionName: '{settings.extKeyName}',
                 controller: '{settings.datatables.domainModelName}',
                 pluginName: '{settings.datatables.action.ajaxPlugin}',
                 action: '{settings.datatables.action.customAction}',
@@ -47,7 +47,7 @@
           target="_blank" 
           action="{settings.datatables.action.customAction}"
           controller="{settings.datatables.domainModelName}" 
-          extensionName="{settings.extKey}" 
+          extensionName="{settings.extKeyName}" 
           pluginName="{settings.datatables.action.contentPlugin}" 
           pageUid="{settings.datatables.action.pageUid}" 
           arguments="{parameter}"
@@ -85,7 +85,7 @@
 
             uri:\"
               {h:uri.ajaxAction(
-                extensionName: '{settings.extKey}',
+                extensionName: '{settings.extKeyName}',
                 controller: '{settings.datatables.domainModelName}',
                 pluginName: '{settings.datatables.action.ajaxPlugin}',
                 action: '{settings.datatables.action.editAction}',
@@ -100,7 +100,7 @@
           target="_blank" 
           action="{settings.datatables.action.editAction}"
           controller="{settings.datatables.domainModelName}" 
-          extensionName="{settings.extKey}" 
+          extensionName="{settings.extKeyName}" 
           pluginName="{settings.datatables.action.contentPlugin}" 
           pageUid="{settings.datatables.action.pageUid}" 
           arguments="{parameter}"
@@ -117,6 +117,7 @@
     </f:if>
   </f:case>
   <f:case value="SHOW BUTTON">
+    
     <f:if condition="{settings.datatables.action.showActionAjax}">
       <f:then>
         <f:image class="modalMessage"
@@ -138,7 +139,7 @@
 
             uri:\"
               {h:uri.ajaxAction(
-                extensionName: '{settings.extKey}',
+                extensionName: '{settings.extKeyName}',
                 controller: '{settings.datatables.domainModelName}',
                 pluginName: '{settings.datatables.action.ajaxPlugin}',
                 action: '{settings.datatables.action.showAction}',
@@ -153,7 +154,7 @@
           target="_blank" 
           action="{settings.datatables.action.showAction}"
           controller="{settings.datatables.domainModelName}" 
-          extensionName="{settings.extKey}" 
+          extensionName="{settings.extKeyName}" 
           pluginName="{settings.datatables.action.ajaxPlugin}" 
           pageUid="{settings.datatables.action.pageUid}" 
           arguments="{parameter}"
@@ -198,7 +199,7 @@
 
             uri:\"
               {h:uri.ajaxAction(
-                extensionName: '{settings.extKey}',
+                extensionName: '{settings.extKeyName}',
                 controller: '{settings.datatables.domainModelName}',
                 pluginName: '{settings.datatables.action.ajaxPlugin}',
                 action: '{settings.datatables.action.deleteAction}',
@@ -213,7 +214,7 @@
           id="{settings.name}_delete_{uid}" 
           action="{settings.datatables.action.deleteAction}" 
           controller="{settings.datatables.domainModelName}" 
-          extensionName="{settings.extKey}" 
+          extensionName="{settings.extKeyName}" 
           pluginName="{settings.name}" 
           pageUid="{settings.datatables.action.pageUid}" 
           arguments="{parameter}"
@@ -254,7 +255,7 @@
 <f:comment>
                 {f:uri.action(
                 pageType: '{settings.datatables.action.ajaxPageType}', 
-                extensionName: '{settings.extKey}', 
+                extensionName: '{settings.extKeyName}', 
                 pluginName: '{settings.datatables.action.ajaxPlugin}', 
                 controller: '{settings.datatables.domainModelName}', 
                 action: '{settings.datatables.action.editAction}',

@@ -26,6 +26,8 @@ namespace CGB\Datatables\Service;
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
+use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
+
 /**
  * Various helper routines
  *
@@ -561,7 +563,9 @@ class DataService implements \TYPO3\CMS\Core\SingletonInterface {
             
             $conjList = \TYPO3\CMS\Core\Utility\GeneralUtility::trimExplode('&', $globalFilterString);
 
-            $additionalRepository = $this->objectManager->get('CGB\\Relax5core\\Domain\\Repository\\OwnerRepository');
+            if (ExtensionManagementUtility::isLoaded('relax5core')) {
+              $additionalRepository = $this->objectManager->get('CGB\\Relax5core\\Domain\\Repository\\OwnerRepository');
+            } 
             if ($additionalRepository) {
                 $feuserObject = $additionalRepository->findByUid($GLOBALS['TSFE']->fe_user->user['uid']);
             }
@@ -940,14 +944,24 @@ class DataService implements \TYPO3\CMS\Core\SingletonInterface {
             } else {
                 if (strpos($rawSqlStatement, 'ORDER BY') === false) {
                     // $rawSqlStatement .= ' GROUP BY 1';
-                    $rawSqlStatement = str_replace('SELECT `', 'SELECT COUNT(DISTINCT `', $rawSqlStatement);
+                    $selectPos = strpos($rawSqlStatement, 'SELECT');
+                    $fromPos = strpos($rawSqlStatement, 'FROM');
+                    
+                    $rawSqlStatement = substr_replace($rawSqlStatement, 'COUNT(DISTINCT ', 7, 0);
+                    
+                    // $rawSqlStatement = str_replace('SELECT `', 'SELECT COUNT(DISTINCT `', $rawSqlStatement);
                     $rawSqlStatement = str_replace('`.* FROM', '`.`uid`) AS count FROM', $rawSqlStatement);
                 } else { 
-                    $rawSqlStatement = str_replace('SELECT `', 'SELECT COUNT(DISTINCT `', $rawSqlStatement);
+                    $selectPos = strpos($rawSqlStatement, 'SELECT');
+                    $fromPos = strpos($rawSqlStatement, 'FROM');
+                    
+                    $rawSqlStatement = substr_replace($rawSqlStatement, 'COUNT(DISTINCT ', 7, 0);
+                    
+                    // $rawSqlStatement = str_replace('SELECT `', 'SELECT COUNT(DISTINCT `', $rawSqlStatement);
                     $rawSqlStatement = str_replace('`.* FROM', '`.`uid`) AS count FROM', $rawSqlStatement);
                     // $rawSqlStatement = str_replace('ORDER BY', 'GROUP BY 1 ORDER BY', $rawSqlStatement);
                 }
-                // echo $rawSqlStatement;
+                //echo $rawSqlStatement;
                 $query->statement($rawSqlStatement);
                 
                 $result = $query->execute(true);

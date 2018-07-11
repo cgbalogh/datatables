@@ -141,11 +141,16 @@ class DatatableController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionContro
         
         // extract domain model name and extension key
         preg_match('/^[A-Za-z0-9]*\\\([A-Za-z0-9]*)\\\Domain\\\Model\\\([A-Za-z0-9]*)$/', $this->settings['datatables']['domainObject'], $matches);
+        
         $this->settings['datatables']['domainModelName'] = $matches[2];
         $this->settings['extKey'] = \TYPO3\CMS\Core\Utility\GeneralUtility::camelCaseToLowerCaseUnderscored($matches[1]);
         $this->settings['name'] = \TYPO3\CMS\Core\Utility\GeneralUtility::camelCaseToLowerCaseUnderscored($this->settings['datatables']['domainModelName']);
         $this->settings['prefix'] = 'tx_' . implode('_', array_map('\\TYPO3\\CMS\\Core\\Utility\\GeneralUtility::camelCaseToLowerCaseUnderscored', $domainModelNameArray));
         $this->settings['prefix'] = $flexFormUserFunc->convertClassNameToTableName($this->settings['datatables']['domainObject']);
+        
+        $domainStringExploded = \TYPO3\CMS\Core\Utility\GeneralUtility::trimExplode('_', $this->settings['prefix']);
+        $this->settings['extKeyName'] = $domainStringExploded[1];
+        
         $this->dataService->setSettings($this->settings);
         $this->dataService->setRequestParams([
             'pageType' => \TYPO3\CMS\Core\Utility\GeneralUtility::_GET('type'),
