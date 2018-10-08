@@ -115,6 +115,31 @@ class FlexFormUserFunc {
         \array_push($fConfig['items'], array('CHECKBOX','CHECKBOX'));
         \array_push($fConfig['items'], array('CUSTOM','CUSTOM'));
     }
+
+    /**
+    * getPropertiesTree
+    * 
+    * gets properties from flexform configuration as tree
+    * 
+    * @param array $fConfig
+    *
+    * @return void
+    */
+    public function getPropertiesTree(&$fConfig) {
+        // get selected class 
+        $class = $fConfig ['flexParentDatabaseRow']['pi_flexform']['data']['sheet2']['lDEF']['settings.datatables.domainObject']['vDEF'][0];
+        // get property list from classname renders a property, type pair to be added to the propertyList selector
+        foreach (self::getPropertyListFromClassName ( $class ) as $key => $value) {
+            \array_push($fConfig['items'], array($value ,$key));
+        }
+
+        // add default items for editing, deleting and selecting
+        \array_push($fConfig['items'], array('EDIT BUTTON','EDIT BUTTON'));
+        \array_push($fConfig['items'], array('SHOW BUTTON','SHOW BUTTON'));
+        \array_push($fConfig['items'], array('DELETE BUTTON','DELETE BUTTON'));
+        \array_push($fConfig['items'], array('CHECKBOX','CHECKBOX'));
+        \array_push($fConfig['items'], array('CUSTOM','CUSTOM'));
+    }
     
     /**
     * getSelectedProperties

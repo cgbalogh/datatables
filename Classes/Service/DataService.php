@@ -1199,14 +1199,15 @@ class DataService implements \TYPO3\CMS\Core\SingletonInterface {
      * @return type
      */
     public function convertToString ( $obj, $h, $p ) {
-        
         if ((gettype($obj) == 'object') && (get_class($obj) == 'DateTime')) {
             // format DateTime according to formatcode string (translation key)
             if ($p['formatcode']) {
                 $formatcode = $p['formatcode'] ? $p['formatcode'] : 'tx_datatables.date';
             }
             $html = $obj->format(\TYPO3\CMS\Extbase\Utility\LocalizationUtility::translate($formatcode, 'datatables'));
-            
+	} elseif ( (gettype($obj) == 'double') ) {
+	    $html = $obj <> 0 ? number_format($obj, 2, ",", ".") : '';
+
         } elseif ( (gettype($obj) == 'integer') && ($p['formatcode'] == 'tx_datatables.time') ) {
             $html = $obj > 0 ? gmdate(\TYPO3\CMS\Extbase\Utility\LocalizationUtility::translate($p['formatcode'], 'datatables'), $obj) : '';
             
